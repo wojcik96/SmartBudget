@@ -1,0 +1,139 @@
+<div class="container-fluid mt-4">
+  <p class="h3">Dashboard</p>
+  <app-wrapper>
+    <div class="row">
+      <div class="col-12 col-lg-3">
+        <div class="row">
+          <!-- TODO financial-card.component -->
+          <div class="col p-3 d-flex flex-column gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 5C20 6.65685 16.4183 8 12 8C7.58172 8 4 6.65685 4 5M20 5C20 3.34315 16.4183 2 12 2C7.58172 2 4 3.34315 4 5M20 5V19C20 20.6569 16.4183 22 12 22C7.58172 22 4 20.6569 4 19V5M20 9.6666C20 11.3235 16.4183 12.6666 12 12.6666C7.58172 12.6666 4 11.3235 4 9.6666M20 14.33C20 15.9869 16.4183 17.33 12 17.33C7.58172 17.33 4 15.9869 4 14.33"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="fs-6">Account and Wallet Balance</span>
+            <span class="fs-5 fw-bold">144,411.19 <span class="fs-6">PLN</span></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col p-3 d-flex flex-column gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22 7L14.1314 14.8686C13.7354 15.2646 13.5373 15.4627 13.309 15.5368C13.1082 15.6021 12.8918 15.6021 12.691 15.5368C12.4627 15.4627 12.2646 15.2646 11.8686 14.8686L9.13137 12.1314C8.73535 11.7354 8.53735 11.5373 8.30902 11.4632C8.10817 11.3979 7.89183 11.3979 7.69098 11.4632C7.46265 11.5373 7.26465 11.7354 6.86863 12.1314L2 17M22 7H15M22 7V14"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="fs-6">Income</span>
+            <span class="fs-5 fw-bold">14,411.19 <span class="fs-6">PLN</span></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col p-3 d-flex flex-column gap-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22 17L14.1314 9.13137C13.7354 8.73535 13.5373 8.53735 13.309 8.46316C13.1082 8.3979 12.8918 8.3979 12.691 8.46316C12.4627 8.53735 12.2646 8.73535 11.8686 9.13137L9.13137 11.8686C8.73535 12.2646 8.53735 12.4627 8.30902 12.5368C8.10817 12.6021 7.89183 12.6021 7.69098 12.5368C7.46265 12.4627 7.26465 12.2646 6.86863 11.8686L2 7M22 17H15M22 17V10"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="fs-6">Expenses</span>
+            <span class="fs-5 fw-bold">4,411.19 <span class="fs-6">PLN</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4 p-3">
+        <!-- TODO budgets.component -->
+        <p class="h5">Budgets</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item border-0 px-0">
+            <div>
+              <div class="d-flex justify-content-between">
+                <span class="fs-xs text-muted">Groceries</span>
+                <span class="fs-xs text-muted">1200 PLN</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75"
+                  aria-valuemin="0" aria-valuemax="100">900 PLN</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item border-0 px-0">
+            <div>
+              <div class="d-flex justify-content-between">
+                <span class="fs-xs text-muted">Entertainment</span>
+                <span class="fs-xs text-muted">800 PLN</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50"
+                  aria-valuemin="0" aria-valuemax="100">400 PLN</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item border-0 px-0">
+            <div>
+              <div class="d-flex justify-content-between">
+                <span class="fs-xs text-muted">Utilities</span>
+                <span class="fs-xs text-muted">1000 PLN</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30"
+                  aria-valuemin="0" aria-valuemax="100">300 PLN</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="list-group-item px-0">
+            <div>
+              <div class="d-flex justify-content-between">
+                <span class="small text-muted">Transportation</span>
+                <span class="small text-muted">600 PLN</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 90%" aria-valuenow="90"
+                  aria-valuemin="0" aria-valuemax="100">540 PLN</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 col-lg-5 p-3">
+        <!-- TODO account-list .component -->
+        <p class="h5">Cash Accounts and Wallets</p>
+        <div>
+          <div class="container px-3 d-flex justify-content-between">
+            <span class="fs-xs text-muted">Nazwa rachunku</span>
+            <span class="fs-xs text-muted">Saldo</span>
+          </div>
+          <ul class="list-group list-group-flush p-0">
+            <li class="list-group-item border-0 px-0">
+              <div class="container border rounded p-3 d-flex justify-content-between">
+                <span class="small">Konto 0</span>
+                <span class="small">145 758,30 PLN</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="container px-3 d-flex justify-content-between">
+            <span class="fs-xs text-muted">Nazwa rachunku</span>
+            <span class="fs-xs text-muted">Saldo</span>
+          </div>
+          <ul class="list-group list-group-flush p-0">
+            <li class="list-group-item border-0 px-0">
+              <div class="container border rounded p-3 d-flex justify-content-between">
+                <span class="small">Konto 0</span>
+                <span class="small">145 758,30 PLN</span>
+              </div>
+            </li>
+            <li class="list-group-item border-0 px-0">
+              <div class="container border rounded p-3 d-flex justify-content-between">
+                <span class="small">Konto 0</span>
+                <span class="small">145 758,30 PLN</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </app-wrapper>
+
+</div>

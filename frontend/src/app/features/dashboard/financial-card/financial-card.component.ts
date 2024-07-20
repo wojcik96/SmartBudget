@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CurrencyPipe, registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
-registerLocaleData(localeFr, 'fr');
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-financial-card',

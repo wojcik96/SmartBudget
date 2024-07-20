@@ -3,52 +3,16 @@
   <app-wrapper>
     <div class="row">
       <div class="col-12 col-lg-3 px-0">
-        <app-financial-card icon="bi-wallet" title="Account and Wallet Balance" [value]="144411.19" />
-        <app-financial-card icon="bi-graph-up-arrow" title="Income" [value]="14411.119" />
-        <app-financial-card icon="bi-graph-down-arrow" title="Expenses" [value]="4411.19" />
+        @for (card of financialCards; track $index) {
+        <app-financial-card [icon]="card.icon" [title]="card.title" [value]="card.value" />
+        }
       </div>
       <div class="col-12 col-lg-4 p-3">
         <app-budgets />
       </div>
       <div class="col-12 col-lg-5 p-3">
-        <!-- TODO account-list .component -->
-        <p class="h5">Cash Accounts and Wallets</p>
-        <div>
-          <div class="container px-3 d-flex justify-content-between">
-            <span class="fs-xs text-muted">Nazwa rachunku</span>
-            <span class="fs-xs text-muted">Saldo</span>
-          </div>
-          <ul class="list-group list-group-flush p-0">
-            <li class="list-group-item border-0 px-0">
-              <div class="container border rounded p-3 d-flex justify-content-between">
-                <span class="small">Konto 0</span>
-                <span class="small">145 758,30 PLN</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div class="container px-3 d-flex justify-content-between">
-            <span class="fs-xs text-muted">Nazwa rachunku</span>
-            <span class="fs-xs text-muted">Saldo</span>
-          </div>
-          <ul class="list-group list-group-flush p-0">
-            <li class="list-group-item border-0 px-0">
-              <div class="container border rounded p-3 d-flex justify-content-between">
-                <span class="small">Konto 0</span>
-                <span class="small">145 758,30 PLN</span>
-              </div>
-            </li>
-            <li class="list-group-item border-0 px-0">
-              <div class="container border rounded p-3 d-flex justify-content-between">
-                <span class="small">Konto 0</span>
-                <span class="small">145 758,30 PLN</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <app-accounts-list />
       </div>
     </div>
   </app-wrapper>
-
 </div>

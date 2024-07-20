@@ -1,5 +1,6 @@
 <div class="d-flex flex-column gap-2 p-3">
   <i class="bi" [class]="cardData()?.icon" style="font-size: 24px;"></i>
   <span class="fs-6">{{ cardData()?.title }}</span>
-  <span class="fs-5 fw-bold">{{ cardData()?.value| currency: cardData()?.currency : 'symbol' : '2.2-2' : 'fr' }}</span>
+  <span class="fs-5 fw-bold" appCurrencyValue [value]="cardData()!.value"
+    [currencyCode]="cardData()?.currency || 'PLN'"></span>
 </div>

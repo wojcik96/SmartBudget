@@ -1,0 +1,11 @@
+<p class="h5">Cash Accounts and Wallets</p>
+@for (accountGroup of accountGroups; track $index) {
+<div>
+  <app-account-list-header [nameLabel]="accountGroup.nameHeader" [balanceLabel]="accountGroup.balanceHeader" />
+  <ul class="list-group list-group-flush p-0">
+    @for (account of accountGroup.accounts; track $index) {
+    <app-account-item [account]="account" />
+    }
+  </ul>
+</div>
+}

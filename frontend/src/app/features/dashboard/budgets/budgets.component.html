@@ -1,0 +1,8 @@
+<p class="h5">Budgets</p>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item border-0 px-0">
+    @for (item of budgets; track $index) {
+    <app-budget-item [itemData]="item" />
+    }
+  </li>
+</ul>

@@ -6,9 +6,9 @@ import { NavItem } from './nav-item.modle';
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [NavItemComponent],
   templateUrl: './nav.component.html',
-  styleUrl: './nav.component.scss'
+  styleUrl: './nav.component.scss',
+  imports: [NavItemComponent],
 })
 export class NavComponent {
   navItems: NavItem[] = [

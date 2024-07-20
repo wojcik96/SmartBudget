@@ -6,9 +6,9 @@ import { Account } from '../account.model';
 @Component({
   selector: 'app-account-item',
   standalone: true,
-  imports: [CurrencyPipe],
   templateUrl: './account-item.component.html',
-  styleUrl: './account-item.component.scss'
+  styleUrl: './account-item.component.scss',
+  imports: [CurrencyPipe]
 })
 export class AccountItemComponent {
   account = input.required<Account>();

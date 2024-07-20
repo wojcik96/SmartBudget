@@ -6,9 +6,9 @@ import { FinancialCard } from './financial-card.model';
 @Component({
   selector: 'app-financial-cards',
   standalone: true,
-  imports: [FinancialCardComponent],
   templateUrl: './financial-cards.component.html',
-  styleUrl: './financial-cards.component.scss'
+  styleUrl: './financial-cards.component.scss',
+  imports: [FinancialCardComponent]
 })
 export class FinancialCardsComponent {
   financialCards: FinancialCard[] = [

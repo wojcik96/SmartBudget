@@ -4,6 +4,7 @@ import { WrapperComponent } from '../../shared/components/wrapper/wrapper.compon
 import { BudgetsComponent } from "./budgets/budgets.component";
 import { AccountsListComponent } from "./accounts-list/accounts-list.component";
 import { FinancialCardsComponent } from "./financial-cards/financial-cards.component";
+import { ChartComponent } from "./chart/chart.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,8 @@ import { FinancialCardsComponent } from "./financial-cards/financial-cards.compo
     WrapperComponent,
     FinancialCardsComponent,
     BudgetsComponent,
-    AccountsListComponent
+    AccountsListComponent,
+    ChartComponent
   ],
 })
 export class DashboardComponent { }

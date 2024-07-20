@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { FinancialCard } from '../financial-card.model';
 
 @Component({
   selector: 'app-financial-card',
@@ -9,8 +10,5 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './financial-card.component.scss'
 })
 export class FinancialCardComponent {
-  @Input() icon: string = 'bi-wallet';
-  @Input() title: string = '';
-  @Input() value: number = 0;
-  @Input() currencyCode: string = 'PLN';
+  cardData = input<FinancialCard>();
 }

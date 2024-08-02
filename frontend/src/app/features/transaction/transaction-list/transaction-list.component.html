@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="d-flex flex-row gap-1 p-2 pb-0">
+      <div class="col-2 x-small text-muted">Data</div>
+      <div class="col x-small text-muted">Title</div>
+      <div class="col-3 x-small text-muted">Category</div>
+      <div class="col-2 x-small text-muted text-end text-end">Amount</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <ul class="p-0">
+        @for (transaction of transactions; track $index) {
+            <app-transaction-item [data]="transaction" />
+        }
+    </ul>
+  </div>
+</div>

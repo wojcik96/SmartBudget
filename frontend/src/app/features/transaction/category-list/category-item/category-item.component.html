@@ -1,0 +1,5 @@
+<div class="d-flex align-items-center shadow-sm rounded border p-2">
+  <i class="bi p-1" [classList]="categoryData()?.icon"></i>
+  <span class="ms-2 text-start flex-grow-1 small">{{ categoryData()?.label }}</span>
+  <span class="small" appCurrencyValue [value]="categoryData()!.value"></span>
+</div>

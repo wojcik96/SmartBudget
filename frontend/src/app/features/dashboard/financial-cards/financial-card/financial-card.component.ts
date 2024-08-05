@@ -4,7 +4,7 @@ import { FinancialCard } from '../financial-card.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
 @Component({
-  selector: 'app-financial-card',
+  selector: '[appFinancialCard]',
   standalone: true,
   templateUrl: './financial-card.component.html',
   styleUrl: './financial-card.component.scss',

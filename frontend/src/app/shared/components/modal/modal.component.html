@@ -1,0 +1,42 @@
+@if (open) {
+<div class="modal-backdrop"></div>
+<div class="modal" tabindex="-1" role="dialog" style="display: block">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-4 pb-2">
+        <p class="modal-title h4 mb-0" id="transactionModalLabel">
+          {{ config.title }}
+        </p>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="discardWrapper($event)"
+        ></button>
+      </div>
+      <div class="modal-body p-4 pt-2">
+        <p>{{ config.description }}</p>
+        <ng-content />
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          (click)="saveWrapper($event)"
+        >
+          Save changes
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          data-dismiss="modal"
+          (click)="discardWrapper($event)"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

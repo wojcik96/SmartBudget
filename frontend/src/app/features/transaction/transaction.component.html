@@ -1,0 +1,25 @@
+<div class="container-fluid mt-4">
+  <p class="h3">Transaction</p>
+  <div class="row">
+    <div class="col-4">
+      <div appWrapper>
+        <p class="h4">Kategorie</p>
+        <app-category-list />
+      </div>
+    </div>
+    <div class="col-8">
+      <div appWrapper>
+        <div class="d-flex justify-content-between">
+          <p class="h4 mb-0">Transakcje</p>
+          <button class="btn btn-outline-secondary btn-sm" (click)="addTransaction()">
+            <i class="bi bi-plus-circle-dotted p-1"></i> Add transactiopn
+          </button>
+        </div>
+        <hr />
+        <app-transaction-list />
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-transaction-form />

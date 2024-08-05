@@ -4,7 +4,7 @@ import { Account } from '../account.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
 @Component({
-  selector: 'app-account-item',
+  selector: '[appAccountItem]',
   standalone: true,
   templateUrl: './account-item.component.html',
   styleUrl: './account-item.component.scss',

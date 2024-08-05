@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  selector: 'app-nav-item',
+  selector: '[appNavItem]',
   standalone: true,
   templateUrl: './nav-item.component.html',
   styleUrl: './nav-item.component.scss',

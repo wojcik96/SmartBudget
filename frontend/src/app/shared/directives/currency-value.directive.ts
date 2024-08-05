@@ -20,7 +20,8 @@ export class CurrencyValueDirective implements OnChanges {
   }
 
   private formatValue() {
-    const formattedValue = this.currencyPipe.transform(this.value, this.currencyCode, 'symbol', '2.2-2', this.locale);
+    const formattedValue = this.currencyPipe.transform(this.value, this.currencyCode, 'symbol', '1.2-2', this.locale);
+    
     if (formattedValue) {
       this.el.nativeElement.textContent = formattedValue;
     }

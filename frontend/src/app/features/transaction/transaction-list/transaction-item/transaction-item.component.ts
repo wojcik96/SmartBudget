@@ -1,9 +1,9 @@
 import { Component, input } from '@angular/core';
-import { Transaction } from '../transaction.model';
+import { Transaction } from '../model/transaction.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
 @Component({
-  selector: 'app-transaction-item',
+  selector: '[appTransactionItem]',
   standalone: true,
   templateUrl: './transaction-item.component.html',
   styleUrl: './transaction-item.component.scss',

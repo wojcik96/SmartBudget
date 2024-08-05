@@ -11,7 +11,7 @@
   <div class="row">
     <ul class="p-0">
         @for (transaction of transactions; track $index) {
-            <app-transaction-item [data]="transaction" />
+          <li appTransactionItem [data]="transaction"></li>
         }
     </ul>
   </div>

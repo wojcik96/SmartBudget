@@ -4,7 +4,7 @@ import { BudgetItem } from '../budget-item.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
 @Component({
-  selector: 'app-budget-item',
+  selector: '[appBudgetItem]',
   standalone: true,
   templateUrl: './budget-item.component.html',
   styleUrl: './budget-item.component.scss',

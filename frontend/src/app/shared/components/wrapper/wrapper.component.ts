@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-wrapper',
+  selector: '[appWrapper]',
   standalone: true,
   imports: [],
   templateUrl: './wrapper.component.html',

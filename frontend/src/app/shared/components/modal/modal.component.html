@@ -24,8 +24,9 @@
           type="button"
           class="btn btn-primary btn-sm"
           (click)="saveWrapper($event)"
+          [disabled]="config.isSaveDisabled"
         >
-          Save changes
+        {{ config.saveButtonLabel }}
         </button>
         <button
           type="button"
@@ -33,7 +34,7 @@
           data-dismiss="modal"
           (click)="discardWrapper($event)"
         >
-          Close
+        {{ config.closeButtonLabel }}
         </button>
       </div>
     </div>

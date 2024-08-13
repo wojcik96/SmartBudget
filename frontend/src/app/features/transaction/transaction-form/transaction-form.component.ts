@@ -61,6 +61,8 @@ export class TransactionFormComponent {
       const transaction = this.createTransaction(transactionData);
       this.transactionService.addTransaction(transaction);
       this.closeModal();
+    } else {
+      this.transactionForm.markAllAsTouched();
     }
   }
 

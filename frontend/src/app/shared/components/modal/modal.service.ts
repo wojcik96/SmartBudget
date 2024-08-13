@@ -8,8 +8,6 @@ export class ModalService {
   isOpen = false;
   config = new ModalConfig();
 
-  constructor() {}
-
   open(config: ModalConfig) {
     this.config = { ...this.config, ...config };
     this.isOpen = true;

@@ -1,5 +1,5 @@
 <app-modal>
-  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" #formElement>
     <div class="mb-3">
       <label for="title" class="form-label x-small text-muted mb-1">Tytuł</label>
       <input
@@ -61,8 +61,8 @@
         <option [value]="category.id">{{ category.label }}</option>
         }
       </select>
-      @if (transactionForm.get('category')?.invalid &&
-      transactionForm.get('category')?.touched) {
+      @if (transactionForm.get('categoryId')?.invalid &&
+      transactionForm.get('categoryId')?.touched) {
       <div class="text-danger x-small fw-bold">Kategoria jest wymagana</div>
       }
     </div>
@@ -82,14 +82,6 @@
       </div>
       }
     </div>
-  
-    <button
-      type="submit"
-      class="btn btn-primary btn-sm"
-      [disabled]="transactionForm.invalid"
-    >
-      Dodaj transakcję
-    </button>
   </form>
   
 </app-modal>

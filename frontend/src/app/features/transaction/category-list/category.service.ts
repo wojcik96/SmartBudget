@@ -23,16 +23,16 @@ export class CategoryService {
 
   // TODO - from backend
   private categorySummaryMap: { [key: string]: CategorySummary } = {
-    'cat-1': { id: 'cat-1', label: 'Przychody', amount: 0 },
-    'cat-2': { id: 'cat-2', label: 'Zakupy', amount: 0 },
-    'cat-3': { id: 'cat-3', label: 'Mieszkanie', amount: 0 },
-    'cat-4': { id: 'cat-4', label: 'Ubezpieczenia', amount: 0 },
-    'cat-5': { id: 'cat-5', label: 'Transport', amount: 0 },
-    'cat-6': { id: 'cat-6', label: 'Praca', amount: 0 },
-    'cat-7': { id: 'cat-7', label: 'Zdrowie', amount: 0 },
-    'cat-8': { id: 'cat-8', label: 'Rodzina', amount: 0 },
-    'cat-9': { id: 'cat-9', label: 'Rozrywka', amount: 0 },
-    'cat-10': { id: 'cat-10', label: 'Oszczędności', amount: 0 }
+    'cat-1': { id: 'cat-1', label: 'Przychody', icon: 'bi bi-plus-circle-dotted', amount: 0 },
+    'cat-2': { id: 'cat-2', label: 'Zakupy', icon: 'bi bi-cart', amount: 0 },
+    'cat-3': { id: 'cat-3', label: 'Mieszkanie', icon: 'bi bi-house', amount: 0 },
+    'cat-4': { id: 'cat-4', label: 'Ubezpieczenia', icon: 'bi bi-shield-lock', amount: 0 },
+    'cat-5': { id: 'cat-5', label: 'Transport', icon: 'bi bi-car-front', amount: 0 },
+    'cat-6': { id: 'cat-6', label: 'Praca', icon: 'bi bi-briefcase', amount: 0 },
+    'cat-7': { id: 'cat-7', label: 'Zdrowie', icon: 'bi bi-heart', amount: 0 },
+    'cat-8': { id: 'cat-8', label: 'Rodzina', icon: 'bi bi-person-heart', amount: 0 },
+    'cat-9': { id: 'cat-9', label: 'Rozrywka', icon: 'bi bi-film', amount: 0 },
+    'cat-10': { id: 'cat-10', label: 'Oszczędności', icon: 'bi bi-bank', amount: 0 }
   };
 
   getAvailableCategories(): Category[] {

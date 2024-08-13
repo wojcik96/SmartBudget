@@ -18,12 +18,14 @@ import { ModalService } from '../../shared/components/modal/modal.service';
     TransactionFormComponent,
   ],
 })
-export class TransactionComponent {  
+export class TransactionComponent {
   constructor(private modalService: ModalService) {}
 
   addTransaction() {
     this.modalService.open({
       title: 'Add transaction',
+      saveButtonLabel: 'Add',
+      closeButtonLabel: 'Cancel',
     });
   }
 }

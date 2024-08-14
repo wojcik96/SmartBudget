@@ -1,60 +1,56 @@
-<!-- <div class="row"> -->
-  <div class="d-flex flex-row gap-1 p-2 pb-0">
-    @for (column of tableConfig().columns; track column.key) {
-    <div [class]="column.width" class="x-small text-muted">
-      {{ column.label }}
-    </div>
-    }
-    <div class="dropdown-column"></div>
+<div class="d-flex flex-row gap-1 p-2 pb-0">
+  @for (column of tableConfig().columns; track column.key) {
+  <div [class]="column.width" class="x-small text-muted">
+    {{ column.label }}
   </div>
-<!-- </div> -->
+  }
+  <div class="dropdown-column"></div>
+</div>
 
-<!-- <div class="row"> -->
-  <ul class="p-0">
-    @for (row of tableConfig().data; track $index) {
-    <li> 
-      <div
-        class="d-flex flex-row align-items-center gap-1 mb-2 shadow-sm rounded border p-2"
-      >
-        @for (column of tableConfig().columns; track column.key) {
-        <div [class]="column.width" class="x-small text-muted">
-          {{ row[column.key] }}
-        </div>
-        }
-        <div class="dropdown dropdown-column">
-          <button
-            class="btn btn-sm"
-            type="button"
-            id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="bi bi-three-dots"></i>
-          </button>
-          <ul
-            class="dropdown-menu shadow-sm rounded border"
-            aria-labelledby="dropdownMenuButton"
-          >
-            <li>
-              <button
-                class="dropdown-item x-small"
-                (click)="onClick($index, rowActionType.Edit)"
-              >
-                Edit
-              </button>
-            </li>
-            <li>
-              <button
-                class="dropdown-item x-small"
-                (click)="onClick($index, rowActionType.Delete)"
-              >
-                Delete
-              </button>
-            </li>
-          </ul>
-        </div>
+<ul class="p-0">
+  @for (row of tableConfig().data; track $index) {
+  <li>
+    <div
+      class="d-flex flex-row align-items-center gap-1 mb-2 shadow-sm rounded border p-2"
+    >
+      @for (column of tableConfig().columns; track column.key) {
+      <div [class]="column.width" class="x-small text-muted">
+        {{ row[column.key] }}
       </div>
-    </li>
-    }
-  </ul>
-<!-- </div> -->
+      }
+      <div class="dropdown dropdown-column">
+        <button
+          class="btn btn-sm"
+          type="button"
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-three-dots"></i>
+        </button>
+        <ul
+          class="dropdown-menu shadow-sm rounded border"
+          aria-labelledby="dropdownMenuButton"
+        >
+          <li>
+            <button
+              class="dropdown-item x-small"
+              (click)="onClick(row['id'], rowActionType.Edit)"
+            >
+              Edit
+            </button>
+          </li>
+          <li>
+            <button
+              class="dropdown-item x-small"
+              (click)="onClick(row['id'], rowActionType.Delete)"
+            >
+              Delete
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </li>
+  }
+</ul>

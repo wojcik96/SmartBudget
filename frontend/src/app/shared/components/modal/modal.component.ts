@@ -1,11 +1,11 @@
 import { Component, ContentChild, ElementRef, Input } from '@angular/core';
 import { ModalService } from './modal.service';
-import { AccountType } from '../../../features/accounts/accounts.service';
+import { AccountType } from '../../../features/accounts/account.model';
 
 export class ModalConfig {
   title?: string;
   description?: string;
-  formType?: string;
+  accountType?: AccountType;
   saveButtonLabel?: string;
   closeButtonLabel?: string;
   isSaveDisabled?: boolean = false;

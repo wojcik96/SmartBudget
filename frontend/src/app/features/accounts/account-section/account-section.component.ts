@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
+
 import { TableConfig } from '../../../shared/model/table-config.model';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
-import {
-  RowAction,
-  RowActionType,
-} from '../../../shared/model/row-action.model';
+import { RowAction, RowActionType } from '../../../shared/model/row-action.model';
 import { AccountsFormComponent } from '../accounts-form/accounts-form.component';
 import { ModalService } from '../../../shared/components/modal/modal.service';
-import { AccountType } from '../accounts.service';
+import { AccountsService } from '../accounts.service';
+import { AccountType } from '../account.model';
 
 @Component({
   selector: 'app-account-section',
@@ -22,7 +21,10 @@ export class AccountSectionComponent {
   @Input({ required: true }) modalText!: string;
   @Input({ required: true }) accountType!: AccountType;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private accountsService: AccountsService
+  ) {}
 
   handleRowAction(event: RowAction) {
     switch (event.type) {
@@ -30,7 +32,7 @@ export class AccountSectionComponent {
         console.log(RowActionType.Edit, event.rowId);
         break;
       case RowActionType.Delete:
-        console.log(RowActionType.Delete, event.rowId);
+        this.accountsService.removeEntry(event.rowId)  
         break;
     }
   }
@@ -38,7 +40,7 @@ export class AccountSectionComponent {
   openModal() {
     this.modalService.open({
       title: this.modalText,
-      formType: this.accountType,
+      accountType: this.accountType,
       saveButtonLabel: 'Add',
       closeButtonLabel: 'Cancel',
     });

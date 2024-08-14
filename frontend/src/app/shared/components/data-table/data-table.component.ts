@@ -14,7 +14,7 @@ export class DataTableComponent {
   selectedRow = output<RowAction>();
   rowActionType = RowActionType;
 
-  onClick(rowId: number, type: RowActionType) {
+  onClick(rowId: string, type: RowActionType) {
     this.selectedRow.emit({
       rowId: rowId,
       type: type,

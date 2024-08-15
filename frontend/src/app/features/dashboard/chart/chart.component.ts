@@ -5,7 +5,6 @@ import Chart from 'chart.js/auto';
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
@@ -17,7 +16,7 @@ export class ChartComponent {
   }
 
   createChart() {
-    this.chart = new Chart("MyChart", {
+    this.chart = new Chart("chart-box", {
       type: 'bar',
 
       data: {

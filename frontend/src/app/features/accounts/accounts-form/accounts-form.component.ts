@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,10 +15,7 @@ import { AccountsService } from '../accounts.service';
   standalone: true,
   templateUrl: './accounts-form.component.html',
   styleUrl: './accounts-form.component.scss',
-  imports: [
-    ModalComponent, 
-    ReactiveFormsModule
-  ],
+  imports: [ModalComponent, ReactiveFormsModule],
 })
 export class AccountsFormComponent {
   accountsForm!: FormGroup;
@@ -62,7 +59,7 @@ export class AccountsFormComponent {
 
   private closeModal() {
     this.accountsForm.reset({
-      currency: ''
+      currency: '',
     });
     this.modalService.isOpen = false;
   }

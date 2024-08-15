@@ -1,10 +1,10 @@
-import { Component, Output } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { ModalService } from '../../shared/components/modal/modal.service';
 import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
-import { TransactionService } from './transaction.service';
-import { ModalService } from '../../shared/components/modal/modal.service';
 
 @Component({
   selector: 'app-transaction',

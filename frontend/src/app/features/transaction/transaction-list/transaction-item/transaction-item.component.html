@@ -1,15 +1,15 @@
 <div
   class="d-flex flex-row align-items-center gap-1 mb-2 shadow-sm rounded border p-2"
 >
-  <div class="col-2 x-small text-muted">{{ data()?.date }}</div>
-  <div class="col x-small fw-bold text-muted">{{ data()?.title }}</div>
-  <div class="col-3 x-small text-muted">{{ data()?.categoryName }}</div>
+  <div class="col-2 x-small text-muted">{{ data.date }}</div>
+  <div class="col x-small fw-bold text-muted">{{ data.title }}</div>
+  <div class="col-3 x-small text-muted">{{ data.categoryName }}</div>
   <div
     class="col-2 x-small fw-bold text-end"
     [class]="amountClass"
     appCurrencyValue
-    [value]="data()!.amount"
+    [value]="data.amount"
   >
-    {{ data()?.amount }}
+    {{ data.amount }}
   </div>
 </div>

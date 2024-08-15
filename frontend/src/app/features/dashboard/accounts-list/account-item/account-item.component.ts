@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { Account } from '../account.model';
+import { AccountItem } from './account-item.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
 @Component({
@@ -11,5 +11,5 @@ import { CurrencyValueDirective } from '../../../../shared/directives/currency-v
   imports: [CurrencyValueDirective]
 })
 export class AccountItemComponent {
-  account = input.required<Account>();
+  @Input() account!: AccountItem;
 }

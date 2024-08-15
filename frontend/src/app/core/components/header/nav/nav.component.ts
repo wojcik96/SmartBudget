@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavItemComponent } from "./nav-item/nav-item.component";
+import { NavItemComponent } from './nav-item/nav-item.component';
 import { NavItem } from './nav-item.modle';
 
 @Component({
@@ -16,6 +16,6 @@ export class NavComponent {
     { routerLink: '/transaction', label: 'Transaction' },
     { routerLink: '/accounts', label: 'Accounts and Wallets' },
     { routerLink: '/planner', label: 'Planner' },
-    { routerLink: '/payments', label: 'Payments' }
+    { routerLink: '/payments', label: 'Payments' },
   ];
 }

@@ -1,4 +1,6 @@
-<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+<ul
+  class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+>
   @for (item of navItems; track $index) {
   <li appNavItem [label]="item.label" [routerLink]="item.routerLink"></li>
   }

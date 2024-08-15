@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 
-import { Transaction } from './model/transaction.model'
-import { TransactionItemComponent } from "./transaction-item/transaction-item.component";
 import { TransactionService } from '../transaction.service';
+import { Transaction } from './model/transaction.model';
+import { TransactionItemComponent } from './transaction-item/transaction-item.component';
 
 @Component({
   selector: 'app-transaction-list',
   standalone: true,
-  imports: [TransactionItemComponent],
   templateUrl: './transaction-list.component.html',
-  styleUrl: './transaction-list.component.scss'
+  styleUrl: './transaction-list.component.scss',
+  imports: [TransactionItemComponent],
 })
 export class TransactionListComponent {
   transactions: Transaction[];
-  
+
   constructor(private transactionService: TransactionService) {
     this.transactions = this.transactionService.getAllTransaction();
   }

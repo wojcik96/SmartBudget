@@ -1,7 +1,7 @@
 <app-modal>
   <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" #formElement>
     <div class="mb-3">
-      <label for="title" class="form-label x-small text-muted mb-1">Tytuł</label>
+      <label for="title" class="form-label x-small text-muted mb-1">Title</label>
       <input
         type="text"
         id="title"
@@ -10,21 +10,21 @@
       />
       @if (transactionForm.get('title')?.invalid &&
       transactionForm.get('title')?.touched) {
-      <div class="text-danger x-small fw-bold">Tytuł jest wymagany</div>
+      <div class="text-danger x-small fw-bold">Title is required</div>
       }
     </div>
   
     <div class="mb-3">
-      <label for="date" class="form-label x-small text-muted mb-1">Data</label>
+      <label for="date" class="form-label x-small text-muted mb-1">Date</label>
       <input type="date" id="date" class="form-control" formControlName="date" />
       @if (transactionForm.get('date')?.invalid &&
       transactionForm.get('date')?.touched) {
-      <div class="text-danger x-small fw-bold">Data jest wymagana</div>
+      <div class="text-danger x-small fw-bold">Date is required</div>
       }
     </div>
   
     <div class="mb-3">
-      <label class="form-label x-small text-muted mb-1">Typ</label>
+      <label class="form-label x-small text-muted mb-1">Type</label>
       <div class="form-check">
         <input
           type="radio"
@@ -43,32 +43,32 @@
           class="form-check-input"
           [value]="transactionType.Expense"
         />
-        <label for="expense" class="form-check-label">Expens</label>
+        <label for="expense" class="form-check-label">Expense</label>
       </div>
       @if (transactionForm.get('type')?.invalid &&
       transactionForm.get('type')?.touched) {
-      <div class="text-danger x-small fw-bold">Typ jest wymagany</div>
+      <div class="text-danger x-small fw-bold">Type is required</div>
       }
     </div>
   
     <div class="mb-3">
       <label for="category" class="form-label x-small text-muted mb-1"
-        >Kategoria</label
+        >Category</label
       >
       <select id="category" class="form-select" formControlName="categoryId">
-        <option value="">Wybierz kategorię</option>
+        <option value="">Select a category</option>
         @for (category of categories; track category.id) {
         <option [value]="category.id">{{ category.label }}</option>
         }
       </select>
       @if (transactionForm.get('categoryId')?.invalid &&
       transactionForm.get('categoryId')?.touched) {
-      <div class="text-danger x-small fw-bold">Kategoria jest wymagana</div>
+      <div class="text-danger x-small fw-bold">Category is required</div>
       }
     </div>
   
     <div class="mb-3">
-      <label for="amount" class="form-label x-small text-muted mb-1">Kwota</label>
+      <label for="amount" class="form-label x-small text-muted mb-1">Amount</label>
       <input
         type="number"
         id="amount"
@@ -78,10 +78,9 @@
       @if (transactionForm.get('amount')?.invalid &&
       transactionForm.get('amount')?.touched) {
       <div class="text-danger x-small fw-bold">
-        Kwota jest wymagana i musi być liczbą
+        Amount is required and must be a number
       </div>
       }
     </div>
   </form>
-  
 </app-modal>

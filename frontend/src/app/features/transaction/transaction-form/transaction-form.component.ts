@@ -6,26 +6,21 @@ import {
   FormBuilder,
 } from '@angular/forms';
 
-import { WrapperComponent } from '../../../shared/components/wrapper/wrapper.component';
-import { TransactionService } from '../transaction.service';
-import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { ModalService } from '../../../shared/components/modal/modal.service';
 import { CategoryService } from '../category-list/category.service';
-import { generateId } from '../../../shared/utils/id-generator';
-
-import { Category } from '../category-list/model/category.model';
+import { TransactionService } from '../transaction.service';
 import { TransactionType } from '../transaction-list/model/transaction-type.enum';
+import { Category } from '../category-list/model/category.model';
+import { WrapperComponent } from '../../../shared/components/wrapper/wrapper.component';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { generateId } from '../../../shared/utils/id-generator';
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.scss',
-  imports: [
-    ReactiveFormsModule, 
-    WrapperComponent, 
-    ModalComponent,
-  ]
+  imports: [ReactiveFormsModule, WrapperComponent, ModalComponent],
 })
 export class TransactionFormComponent {
   categories!: Category[];
@@ -37,7 +32,9 @@ export class TransactionFormComponent {
     private transactionService: TransactionService,
     private categoryService: CategoryService,
     private modalService: ModalService
-  ) { 
+  ) {}
+
+  ngOnInit() {
     this.initForm();
     this.getAllCategories();
   }
@@ -69,10 +66,10 @@ export class TransactionFormComponent {
   private extractTransactionData() {
     const { title, date, type, categoryId, amount } = this.transactionForm.value;
     const categoryLabel = this.categoryService.getCategoryLabelById(categoryId);
-    
+
     return { title, date, type, categoryId, categoryLabel, amount };
   }
-  
+
   private createTransaction(data: {
     title: string;
     date: string;
@@ -87,7 +84,7 @@ export class TransactionFormComponent {
       date: data.date,
       title: data.title,
       type: data.type,
-      categoryName: data.categoryLabel, 
+      categoryName: data.categoryLabel,
       categoryId: data.categoryId,
       amount: data.amount,
     };

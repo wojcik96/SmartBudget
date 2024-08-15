@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
-import { TableConfig } from '../../shared/model/table-config.model';
-import { AccountSectionComponent } from './account-section/account-section.component';
-import { AccountsService } from './accounts.service';
-import { AccountsFormComponent } from './accounts-form/accounts-form.component';
-import { AccountType } from './account.model';
+import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { AccountsService } from './accounts.service';
+import { TableConfig } from '../../shared/model/table-config.model';
+import { AccountType } from './account.model';
+import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
+import { AccountSectionComponent } from './account-section/account-section.component';
+import { AccountsFormComponent } from './accounts-form/accounts-form.component';
 
 @Component({
   selector: 'app-accounts',

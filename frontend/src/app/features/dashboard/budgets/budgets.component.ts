@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+
 import { BudgetItemComponent } from "./budget-item/budget-item.component";
 import { BudgetItem } from './budget-item.model';
 
 @Component({
   selector: 'app-budgets',
   standalone: true,
-  imports: [BudgetItemComponent],
   templateUrl: './budgets.component.html',
-  styleUrl: './budgets.component.scss'
+  styleUrl: './budgets.component.scss',
+  imports: [BudgetItemComponent],
 })
 export class BudgetsComponent {
   budgets: BudgetItem[] = [

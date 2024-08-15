@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 
-import { TableConfig } from '../../../shared/model/table-config.model';
-import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
-import { RowAction, RowActionType } from '../../../shared/model/row-action.model';
-import { AccountsFormComponent } from '../accounts-form/accounts-form.component';
-import { ModalService } from '../../../shared/components/modal/modal.service';
 import { AccountsService } from '../accounts.service';
+import { ModalService } from '../../../shared/components/modal/modal.service';
+import { TableConfig } from '../../../shared/model/table-config.model';
+import { RowAction, RowActionType } from '../../../shared/model/row-action.model';
 import { AccountType } from '../account.model';
+import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
+import { AccountsFormComponent } from '../accounts-form/accounts-form.component';
 
 @Component({
   selector: 'app-account-section',
@@ -17,9 +17,9 @@ import { AccountType } from '../account.model';
 })
 export class AccountSectionComponent {
   @Input({ required: true }) config!: TableConfig;
+  @Input({ required: true }) accountType!: AccountType;
   @Input({ required: true }) title!: string;
   @Input({ required: true }) modalText!: string;
-  @Input({ required: true }) accountType!: AccountType;
 
   constructor(
     private modalService: ModalService,
@@ -32,7 +32,7 @@ export class AccountSectionComponent {
         console.log(RowActionType.Edit, event.rowId);
         break;
       case RowActionType.Delete:
-        this.accountsService.removeEntry(event.rowId)  
+        this.accountsService.removeEntry(event.rowId);
         break;
     }
   }
@@ -44,12 +44,5 @@ export class AccountSectionComponent {
       saveButtonLabel: 'Add',
       closeButtonLabel: 'Cancel',
     });
-
-    // this.accountTableConfig.data.push({
-    //   accountName: 'Account 1',
-    //   importStatus: 'Activeeeee',
-    //   lastImportDate: '08/02/2024',
-    //   balance: '1,758.30 PLN',
-    // });
   }
 }

@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
 import { Transaction } from '../model/transaction.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
 
@@ -10,7 +11,8 @@ import { CurrencyValueDirective } from '../../../../shared/directives/currency-v
   imports: [CurrencyValueDirective],
 })
 export class TransactionItemComponent {
-  data = input<Transaction>();
+  @Input({required: true}) data!: Transaction
+
   amountClass: string = 'text-muted';
 
   ngOnInit() {
@@ -18,7 +20,7 @@ export class TransactionItemComponent {
   }
 
   getAmountClass() {
-    const amount = this.data()!.amount;
+    const amount = this.data.amount;
 
     if (amount > 0) {
       this.amountClass = 'text-success';

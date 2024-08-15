@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 import { BudgetItem } from '../budget-item.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
@@ -11,5 +11,5 @@ import { CurrencyValueDirective } from '../../../../shared/directives/currency-v
   imports: [CurrencyValueDirective],
 })
 export class BudgetItemComponent {
-  itemData = input<BudgetItem>();
+  @Input({required: true}) itemData!: BudgetItem;
 }

@@ -1,9 +1,9 @@
 <div class="container border rounded p-3 d-flex justify-content-between">
-  <span class="small">{{ account().name }}</span>
+  <span class="small">{{ account.name }}</span>
   <span
     class="small"
     appCurrencyValue
-    [value]="account().balance"
-    [currencyCode]="account().currency"
+    [value]="account.balance"
+    [currencyCode]="account.currency"
   ></span>
 </div>

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 import { CategorySummary } from '../model/category-summary.model';
 import { CurrencyValueDirective } from '../../../../shared/directives/currency-value.directive';
@@ -11,5 +11,5 @@ import { CurrencyValueDirective } from '../../../../shared/directives/currency-v
   imports: [CurrencyValueDirective]
 })
 export class CategoryItemComponent {
-  categoryData = input.required<CategorySummary>();
+  @Input({required: true}) categoryData!: CategorySummary;
 }

@@ -1,10 +1,10 @@
 <div class="d-flex flex-column gap-2 p-3">
-  <i class="bi" style="font-size: 24px" [class]="cardData()?.icon"></i>
-  <span class="fs-6">{{ cardData()?.title }}</span>
+  <i class="bi" style="font-size: 24px" [class]="cardData.icon"></i>
+  <span class="fs-6">{{ cardData.title }}</span>
   <span
     class="fs-5 fw-bold"
     appCurrencyValue
-    [value]="cardData()!.value"
-    [currencyCode]="cardData()?.currency || 'PLN'"
+    [value]="cardData.value"
+    [currencyCode]="cardData.currency || 'PLN'"
   ></span>
 </div>

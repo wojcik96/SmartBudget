@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -6,12 +7,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   templateUrl: './nav-item.component.html',
   styleUrl: './nav-item.component.scss',
-  imports: [
-    RouterLink,
-    RouterLinkActive
-  ],
+  imports: [RouterLink, RouterLinkActive],
 })
 export class NavItemComponent {
-  routerLink = input.required<string>();
-  label = input.required<string>();
+  @Input({ required: true }) routerLink!: string;
+  @Input({ required: true }) label!: string;
 }

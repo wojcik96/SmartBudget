@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { TableConfig } from '../../model/table-config.model';
 import { RowAction, RowActionType } from '../../model/row-action.model';
@@ -10,8 +10,9 @@ import { RowAction, RowActionType } from '../../model/row-action.model';
   styleUrl: './data-table.component.scss',
 })
 export class DataTableComponent {
-  tableConfig = input.required<TableConfig>();
-  selectedRow = output<RowAction>();
+  @Input({ required: true }) tableConfig!: TableConfig;
+  @Output() selectedRow = new EventEmitter<RowAction>();
+
   rowActionType = RowActionType;
 
   onClick(rowId: string, type: RowActionType) {

@@ -8,10 +8,6 @@ import { HeaderComponent } from './core/components/header/header.component';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  imports: [
-    RouterOutlet,
-    HeaderComponent
-  ]
+  imports: [RouterOutlet, HeaderComponent],
 })
-export class AppComponent {
-}
+export class AppComponent {}

@@ -1,5 +1,5 @@
 <div class="d-flex flex-row gap-1 p-2 pb-0">
-  @for (column of tableConfig().columns; track column.key) {
+  @for (column of tableConfig.columns; track column.key) {
   <div [class]="column.width" class="x-small text-muted">
     {{ column.label }}
   </div>
@@ -8,12 +8,12 @@
 </div>
 
 <ul class="p-0">
-  @for (row of tableConfig().data; track $index) {
+  @for (row of tableConfig.data; track $index) {
   <li>
     <div
       class="d-flex flex-row align-items-center gap-1 mb-2 shadow-sm rounded border p-2"
     >
-      @for (column of tableConfig().columns; track column.key) {
+      @for (column of tableConfig.columns; track column.key) {
       <div [class]="column.width" class="x-small text-muted">
         {{ row[column.key] }}
       </div>

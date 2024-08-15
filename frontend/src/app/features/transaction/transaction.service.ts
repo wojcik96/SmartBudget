@@ -16,9 +16,9 @@ export class TransactionService {
       id: 'tra-1',
       createdDate: '',
       date: '2024-08-01',
-      title: 'Wynagrodzeniee',
+      title: 'Wynagrodzenie',
       categoryId: 'cat-1',
-      categoryName: 'Przychody',
+      categoryName: 'Income',
       amount: 3000,
       type: TransactionType.Income
     },
@@ -27,7 +27,7 @@ export class TransactionService {
       createdDate: '',
       date: '2024-08-02',
       title: 'Zakupy spożywcze',
-      categoryName: 'Zakupy',
+      categoryName: 'Shopping',
       categoryId: 'cat-2',
       amount: -200,
       type: TransactionType.Expense

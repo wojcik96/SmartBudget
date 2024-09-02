@@ -1,0 +1,13 @@
+<div>
+  <p class="h4 p-0">{{ title }}</p>
+  <button class="btn btn-outline-secondary btn-sm w-auto" (click)="openModal()">
+    <i class="bi bi-plus-circle-dotted p-1"></i> {{ modalText }}
+  </button>
+
+  <app-data-table
+    [tableConfig]="config"
+    (selectedRow)="handleRowAction($event)"
+  ></app-data-table>
+</div>
+
+<app-budget-form />

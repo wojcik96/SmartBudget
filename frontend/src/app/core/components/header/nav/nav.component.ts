@@ -16,6 +16,5 @@ export class NavComponent {
     { routerLink: '/transaction', label: 'Transaction' },
     { routerLink: '/accounts', label: 'Accounts and Wallets' },
     { routerLink: '/planner', label: 'Planner' },
-    { routerLink: '/payments', label: 'Payments' },
   ];
 }

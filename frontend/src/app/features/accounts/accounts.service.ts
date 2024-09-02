@@ -37,19 +37,19 @@ export class AccountsService {
   ]);
   public accounts$ = this.accountsSubject.asObservable();
 
-  private accountTableColumns =  [
-      { label: 'Account Name', key: 'name', width: 'col-2' },
-      { label: 'Import Status', key: 'importStatus', width: 'col' },
-      { label: 'Last Import Date', key: 'lastImportDate', width: 'col-3' },
-      { label: 'Balance', key: 'balance', width: 'col-2 text-end' },
-    ];
+  private accountTableColumns = [
+    { label: 'Account Name', key: 'name', width: 'col-2' },
+    { label: 'Import Status', key: 'importStatus', width: 'col' },
+    { label: 'Last Import Date', key: 'lastImportDate', width: 'col-3' },
+    { label: 'Balance', key: 'balance', width: 'col-2 text-end' },
+  ];
 
-  private walletsTableColumns =  [
-      { label: 'Date Added', key: 'createDate', width: 'col-2' },
-      { label: 'Name', key: 'name', width: 'col' },
-      { label: 'Balance', key: 'balance', width: 'col-3' },
-      { label: '', key: 'empty', width: 'col-2 text-end' },
-    ];
+  private walletsTableColumns = [
+    { label: 'Date Added', key: 'createDate', width: 'col-2' },
+    { label: 'Name', key: 'name', width: 'col' },
+    { label: 'Balance', key: 'balance', width: 'col-3' },
+    { label: '', key: 'empty', width: 'col-2 text-end' },
+  ];
 
   getWalletsTableColumns() {
     return this.walletsTableColumns;
@@ -79,8 +79,6 @@ export class AccountsService {
   }
 
   removeEntry(accountId: string) {
-    console.log('removeEntry id', accountId);
-    
     const updatedAccounts = this.accountsSubject
       .getValue()
       .filter((account) => account.id !== accountId);

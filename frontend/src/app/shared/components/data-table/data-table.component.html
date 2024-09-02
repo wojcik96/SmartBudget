@@ -4,7 +4,9 @@
     {{ column.label }}
   </div>
   }
+  @if (tableConfig.showDropdownMenu) {
   <div class="dropdown-column"></div>
+  }
 </div>
 
 <ul class="p-0">
@@ -18,38 +20,40 @@
         {{ row[column.key] }}
       </div>
       }
-      <div class="dropdown dropdown-column">
-        <button
-          class="btn btn-sm"
-          type="button"
-          id="dropdownMenuButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-three-dots"></i>
-        </button>
-        <ul
-          class="dropdown-menu shadow-sm rounded border"
-          aria-labelledby="dropdownMenuButton"
-        >
-          <li>
-            <button
-              class="dropdown-item x-small"
-              (click)="onClick(row['id'], rowActionType.Edit)"
-            >
-              Edit
-            </button>
-          </li>
-          <li>
-            <button
-              class="dropdown-item x-small"
-              (click)="onClick(row['id'], rowActionType.Delete)"
-            >
-              Delete
-            </button>
-          </li>
-        </ul>
-      </div>
+      @if (tableConfig.showDropdownMenu) {
+        <div class="dropdown dropdown-column">
+          <button
+            class="btn btn-sm"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <ul
+            class="dropdown-menu shadow-sm rounded border"
+            aria-labelledby="dropdownMenuButton"
+          >
+            <li>
+              <button
+                class="dropdown-item x-small"
+                (click)="onClick(row['id'], rowActionType.Edit)"
+              >
+                Edit
+              </button>
+            </li>
+            <li>
+              <button
+                class="dropdown-item x-small"
+                (click)="onClick(row['id'], rowActionType.Delete)"
+              >
+                Delete
+              </button>
+            </li>
+          </ul>
+        </div>
+      }
     </div>
   </li>
   }

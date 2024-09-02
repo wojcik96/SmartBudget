@@ -31,6 +31,7 @@ export class AccountsComponent {
           data: accounts.filter(
             (account) => account.accountType === AccountType.Bank
           ),
+          showDropdownMenu: true
         };
 
         this.walletsTableConfig = {
@@ -38,6 +39,7 @@ export class AccountsComponent {
           data: accounts.filter(
             (account) => account.accountType === AccountType.Wallet
           ),
+          showDropdownMenu: true
         };
       }
     );

@@ -1,0 +1,49 @@
+<app-modal>
+  <form [formGroup]="budgetForm" #formElement (submit)="onSubmit()">
+    <div class="mb-3">
+      <label for="category" class="form-label x-small text-muted mb-1"
+        >Category</label
+      >
+      <select id="category" class="form-select" formControlName="categoryId">
+        <option value="">Select a category</option>
+        @for (category of categories; track category.id) {
+        <option [value]="category.id">{{ category.label }}</option>
+        }
+      </select>
+      @if (budgetForm.get('categoryId')?.invalid &&
+      budgetForm.get('categoryId')?.touched) {
+      <div class="text-danger x-small fw-bold">Category is required</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="plannedAmount" class="form-label x-small text-muted mb-1"
+        >Planned amount</label
+      >
+      <input
+        type="number"
+        id="plannedAmount"
+        class="form-control"
+        formControlName="plannedAmount"
+      />
+      @if (budgetForm.get('plannedAmount')?.invalid &&
+      budgetForm.get('plannedAmount')?.touched) {
+      <div class="text-danger x-small fw-bold">Planned amount is required</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="currency" class="form-label x-small text-muted mb-1"
+        >Currency</label
+      >
+      <select id="currency" class="form-select" formControlName="currency">
+        <option value="">Select currency</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="PLN">PLN</option>
+      </select>
+      @if (budgetForm.get('currency')?.invalid &&
+      budgetForm.get('currency')?.touched) {
+      <div class="text-danger x-small fw-bold">Currency is required</div>
+      }
+    </div>
+  </form>
+</app-modal>

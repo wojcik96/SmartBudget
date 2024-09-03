@@ -58,6 +58,9 @@ export class BudgetFormComponent {
       this.budgetForm.markAllAsTouched();
     }
   }
+  handleChange(e: any) {
+    console.log(e.target.value);
+  } 
 
   private closeModal() {
     this.budgetForm.reset({

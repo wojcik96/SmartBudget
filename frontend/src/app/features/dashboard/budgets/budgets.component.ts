@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
-import { BudgetItemComponent } from "./budget-item/budget-item.component";
-import { BudgetItem } from './budget-item.model';
+import { BudgetItemComponent } from './budget-item/budget-item.component'
+import { BudgetItem } from './budget-item.model'
+import { PlannerService } from '../../planner/planner.service'
+import { Categories } from '../../../shared/model/category.enum'
 
 @Component({
   selector: 'app-budgets',
@@ -11,10 +13,33 @@ import { BudgetItem } from './budget-item.model';
   imports: [BudgetItemComponent],
 })
 export class BudgetsComponent {
-  budgets: BudgetItem[] = [
-    { category: 'Groceries', amount: 1200, spent: 900, progress: 75, progressColor: 'bg-success', currency: 'PLN' },
-    { category: 'Entertainment', amount: 800, spent: 400, progress: 50, progressColor: 'bg-warning', currency: 'PLN' },
-    { category: 'Utilities', amount: 1000, spent: 300, progress: 30, progressColor: 'bg-danger', currency: 'PLN' },
-    { category: 'Transportation', amount: 600, spent: 540, progress: 90, progressColor: 'bg-primary', currency: 'PLN' }
-  ];
+  budgets: BudgetItem[] = []
+  constructor(private plannerService: PlannerService) {}
+
+  ngOnInit() {
+    this.plannerService.budgetsSummary$.subscribe((data) => {
+      data.forEach((budget) => {
+        console.log(
+          '(budget.actualExpenses/budget.plannedAmount) * 100',
+          ((budget.actualExpenses * -1) / budget.plannedAmount) * 100
+        )
+
+        this.budgets.push({
+          category: budget.categoryName,
+          amount: budget.plannedAmount,
+          currency: budget.currency,
+          progress: this.calculatePercentage(
+            budget.actualExpenses,
+            budget.plannedAmount
+          ),
+          progressColor: 'red',
+          spent: budget.actualExpenses,
+        })
+      })
+    })
+  }
+
+  calculatePercentage(actualExpenses: number, plannedAmount: number) {
+    return (Math.abs(actualExpenses) / Math.abs(plannedAmount)) * 100
+  }
 }

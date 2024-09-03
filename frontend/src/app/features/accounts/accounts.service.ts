@@ -2,39 +2,15 @@ import { Injectable } from '@angular/core';
 import { generateId } from '../../shared/utils/id-generator';
 import { BehaviorSubject } from 'rxjs';
 import { Account, AccountData, AccountType } from './account.model';
+import { loadDataFromLS, saveDataToLS } from '../../shared/utils/localStorage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountsService {
-  private accountsSubject = new BehaviorSubject<Account[]>([
-    {
-      id: 'hjgdsu3',
-      createDate: '08.02.2024',
-      name: 'Wallet PL',
-      currency: 'PLN',
-      balance: 145758.3,
-      accountType: AccountType.Wallet,
-    },
-    {
-      id: 'wl-dagjy34',
-      createDate: '10.02.2024',
-      name: 'EUR Wallet',
-      currency: 'EUR',
-      balance: 10000,
-      accountType: AccountType.Wallet,
-    },
-    {
-      id: 'fdsa3',
-      createDate: '08.02.2024',
-      name: 'Account 0',
-      currency: 'PLN',
-      balance: 145758.3,
-      accountType: AccountType.Bank,
-      importStatus: 'Active',
-      lastImportDate: '08.02.2024',
-    },
-  ]);
+  private ACCOUNT_LIST_KEY = 'SmBu-AccLis';
+  private accountsListSummary = loadDataFromLS(this.ACCOUNT_LIST_KEY) || [];
+  private accountsSubject = new BehaviorSubject<Account[]>(this.accountsListSummary);
   public accounts$ = this.accountsSubject.asObservable();
 
   private accountTableColumns = [
@@ -59,6 +35,15 @@ export class AccountsService {
     return this.accountTableColumns;
   }
 
+  getAllBalance() {
+    let balance = 0;
+    this.accountsSubject.value.forEach(account => {
+      balance += account.balance;
+    });
+
+    return balance;
+  }
+
   addEntry(type: AccountType, data: AccountData) {
     const entryId = generateId(type);
     const newEntry: Account = {
@@ -76,6 +61,7 @@ export class AccountsService {
     }
 
     this.accountsSubject.next([...this.accountsSubject.getValue(), newEntry]);
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
   }
 
   removeEntry(accountId: string) {
@@ -83,5 +69,6 @@ export class AccountsService {
       .getValue()
       .filter((account) => account.id !== accountId);
     this.accountsSubject.next(updatedAccounts);
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
   }
 }

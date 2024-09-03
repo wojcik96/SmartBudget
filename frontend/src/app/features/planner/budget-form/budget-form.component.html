@@ -4,7 +4,7 @@
       <label for="category" class="form-label x-small text-muted mb-1"
         >Category</label
       >
-      <select id="category" class="form-select" formControlName="categoryId">
+      <select id="category" (change)="handleChange($event)" class="form-select" formControlName="categoryId">
         <option value="">Select a category</option>
         @for (category of categories; track category.id) {
         <option [value]="category.id">{{ category.label }}</option>

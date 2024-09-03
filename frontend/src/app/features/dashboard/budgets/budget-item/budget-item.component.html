@@ -1,8 +1,8 @@
 <div>
   <div class="d-flex justify-content-between">
-    <span class="fs-xs text-muted">{{ itemData.category }}</span>
+    <span class="x-small text-muted">{{ itemData.category }}</span>
     <span
-      class="fs-xs text-muted"
+      class="x-small text-muted"
       appCurrencyValue
       [value]="itemData.amount"
       [currencyCode]="itemData.currency || 'PLN'"
@@ -10,9 +10,9 @@
   </div>
   <div class="progress">
     <div
-      class="progress-bar"
+      class="progress-bar xx-small"
       role="progressbar"
-      [class]="itemData.progressColor"
+      [style.backgroundColor]="itemData.progressColor"
       [style.width.%]="itemData.progress"
       [attr.aria-valuenow]="itemData.progress"
       aria-valuemin="0"

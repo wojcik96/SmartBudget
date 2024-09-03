@@ -30,13 +30,15 @@ export class BudgetsListComponent {
   ) {}
 
   ngOnInit() {
-    this.budgetsSubscription = this.plannerService.budgets$.subscribe((budgets) => {
-      this.config = {
-        columns: this.plannerService.getBudgetsTableColumns(),
-        data: budgets,
-        showDropdownMenu: false,
-      };
-    });
+    this.budgetsSubscription = this.plannerService.budgetsSummary$.subscribe(
+      (budgets) => {
+        this.config = {
+          columns: this.plannerService.getBudgetsTableColumns(),
+          data: budgets,
+          showDropdownMenu: false,
+        };
+      }
+    );
   }
 
   ngOnDestroy() {

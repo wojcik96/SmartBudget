@@ -1,7 +1,8 @@
 export interface BudgetModel {
   id: string;
   createDate: string;
-  category: string;
+  categoryName: string;
+  categoryId: string;
   currency: string;
   plannedAmount: number;
   actualExpenses: number;

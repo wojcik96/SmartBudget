@@ -19,11 +19,6 @@ export class BudgetsComponent {
   ngOnInit() {
     this.plannerService.budgetsSummary$.subscribe((data) => {
       data.forEach((budget) => {
-        console.log(
-          '(budget.actualExpenses/budget.plannedAmount) * 100',
-          ((budget.actualExpenses * -1) / budget.plannedAmount) * 100
-        )
-
         this.budgets.push({
           category: budget.categoryName,
           amount: budget.plannedAmount,

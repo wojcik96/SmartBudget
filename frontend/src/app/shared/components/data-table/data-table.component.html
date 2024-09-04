@@ -29,7 +29,7 @@
           }
           @case (columnType.STATUS) {
             <div [class]="column.cssClass" class="x-small text-muted">
-              <span class="badge" [class]="row[column.key].type">
+              <span class="badge rounded-pill p-2" [class]="row[column.key].type">
                 {{ row[column.key].label }}
               </span>
             </div>

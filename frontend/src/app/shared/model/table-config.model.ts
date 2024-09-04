@@ -1,6 +1,7 @@
 export enum ColumnType {
   CURRENCY = 'currency',
   STATUS = 'status',
+  NAME = 'name'
 }
 
 export interface ColumnConfig {

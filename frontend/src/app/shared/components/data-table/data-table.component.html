@@ -37,6 +37,7 @@
           @default {
             <div
               [class]="column.cssClass"
+              [class.fw-bold]="column.type === columnType.NAME"
               class="x-small text-muted"
             >
               {{ row[column.key] }}

@@ -16,15 +16,15 @@ export class AccountsService {
   public accounts$ = this.accountsSubject.asObservable()
 
   private accountTableColumns = [
-    { label: 'Account Name', key: 'name', cssClass: 'col-2 fw-bold' },
+    { label: 'Account Name', key: 'name', cssClass: 'col-4', type: ColumnType.NAME },
     { label: 'Import Status', key: 'status', cssClass: 'col', type: ColumnType.STATUS },
     { label: 'Last Import Date', key: 'lastImportDate', cssClass: 'col-3' },
     { label: 'Balance', key: 'balance', cssClass: 'col-2 text-end', type: ColumnType.CURRENCY },
   ];
 
   private walletsTableColumns = [
-    { label: 'Date Added', key: 'createDate', cssClass: 'col-2' },
-    { label: 'Name', key: 'name', cssClass: 'col fw-bold' },
+    { label: 'Name', key: 'name', cssClass: 'col-4', type: ColumnType.NAME },
+    { label: 'Date Added', key: 'createDate', cssClass: 'col' },
     { label: 'Balance', key: 'balance', cssClass: 'col-3', type: ColumnType.CURRENCY },
     { label: '', key: 'empty', cssClass: 'col-2 text-end' },
   ];

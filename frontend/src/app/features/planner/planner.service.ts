@@ -19,7 +19,7 @@ type newBudgetType = {
 })
 export class PlannerService {
   private budgetTableColumns = [
-    { label: 'Category', key: 'categoryName', cssClass: 'col-2 fw-bold' },
+    { label: 'Category', key: 'categoryName', cssClass: 'col-2', type: ColumnType.NAME },
     { label: 'Planned Amount', key: 'plannedAmount', cssClass: 'col', type: ColumnType.CURRENCY },
     { label: 'Actual Expenses', key: 'actualExpenses', cssClass: 'col', type: ColumnType.CURRENCY },
     { label: 'Difference', key: 'difference', cssClass: 'col', type: ColumnType.CURRENCY },

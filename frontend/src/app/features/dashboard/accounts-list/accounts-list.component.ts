@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AccountListHeaderComponent } from './account-list-header/account-list-header.component';
 import { AccountItemComponent } from './account-item/account-item.component';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
-import { TableConfig } from '../../../shared/model/table-config.model';
+import { ColumnType, TableConfig } from '../../../shared/model/table-config.model';
 import { AccountType } from '../../accounts/account.model';
 import { AccountsService } from '../../accounts/accounts.service';
 import { Subscription } from 'rxjs';
@@ -28,13 +28,13 @@ export class AccountsListComponent {
   constructor(private accountsService: AccountsService) {}
 
   private accountTableColumns = [
-    { label: 'Account Name', key: 'name', width: 'col' },
-    { label: 'Balance', key: 'balance', width: 'col-2 text-end' },
+    { label: 'Account Name', key: 'name', cssClass: 'col' },
+    { label: 'Balance', key: 'balance', cssClass: 'col text-end', type: ColumnType.CURRENCY },
   ];
 
   private walletsTableColumns = [
-    { label: 'Wallet Name', key: 'name', width: 'col' },
-    { label: 'Cash Amount', key: 'balance', width: 'col-2 text-end' },
+    { label: 'Wallet Name', key: 'name', cssClass: 'col' },
+    { label: 'Cash Amount', key: 'balance', cssClass: 'col text-end', type: ColumnType.CURRENCY },
   ];
 
   ngOnInit() {

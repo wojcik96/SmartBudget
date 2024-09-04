@@ -5,6 +5,8 @@ import { generateId } from '../../shared/utils/id-generator';
 import { Categories } from '../../shared/model/category.enum';
 import { CategoryService } from '../transaction/category-list/category.service';
 import { loadDataFromLS, saveDataToLS } from '../../shared/utils/localStorage';
+import { ColumnType } from '../../shared/model/table-config.model';
+import { StatusOption } from '../../shared/model/status-type.model';
 
 type newBudgetType = {
   categoryId: string;
@@ -17,11 +19,11 @@ type newBudgetType = {
 })
 export class PlannerService {
   private budgetTableColumns = [
-    { label: 'Category', key: 'categoryName', width: 'col-2' },
-    { label: 'Planned Amount', key: 'plannedAmount', width: 'col' },
-    { label: 'Actual Expenses', key: 'actualExpenses', width: 'col' },
-    { label: 'Difference', key: 'difference', width: 'col' },
-    { label: 'Status', key: 'status', width: 'col-2' },
+    { label: 'Category', key: 'categoryName', cssClass: 'col-2', type: ColumnType.NAME },
+    { label: 'Planned Amount', key: 'plannedAmount', cssClass: 'col', type: ColumnType.CURRENCY },
+    { label: 'Actual Expenses', key: 'actualExpenses', cssClass: 'col', type: ColumnType.CURRENCY },
+    { label: 'Difference', key: 'difference', cssClass: 'col', type: ColumnType.CURRENCY },
+    { label: 'Status', key: 'status', cssClass: 'col-2', type: ColumnType.STATUS },
   ];
   private SUMMARY_MAP_KEY = 'SmBu-budSub';
   private budgetsSummaryMap = loadDataFromLS(this.SUMMARY_MAP_KEY) || [];
@@ -84,7 +86,7 @@ export class PlannerService {
   }
 
   setStatus(difference: number) {
-    return difference >= 0 ? 'Below Budget' : 'Over Budget';
+    return difference >= 0 ? { type: StatusOption.SUCCESS, label:'Below Budget' } : { type: StatusOption.ERROR, label:'Over Budget' };
   }
 
   countDifference(a: number, b: number) {

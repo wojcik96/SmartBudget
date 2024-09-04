@@ -1,3 +1,5 @@
+import { StatusType } from "../../shared/model/status-type.model";
+
 export enum AccountType {
   Bank = 'bank',
   Wallet = 'wallet',
@@ -16,6 +18,6 @@ export interface Account {
   balance: number;
   currency: string;
   createDate: string;
-  importStatus?: string;
+  status?: StatusType;
   lastImportDate?: string;
 }

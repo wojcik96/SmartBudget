@@ -1,3 +1,5 @@
+import { StatusType } from "../../shared/model/status-type.model";
+
 export interface BudgetModel {
   id: string;
   createDate: string;
@@ -7,5 +9,5 @@ export interface BudgetModel {
   plannedAmount: number;
   actualExpenses: number;
   difference: number;
-  status: string;
+  status: StatusType;
 }

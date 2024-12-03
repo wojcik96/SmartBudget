@@ -1,15 +1,11 @@
-<app-modal>
-  <form [formGroup]="accountsForm" #formElement (submit)="onSubmit()">
+<h2 mat-dialog-title>{{data.title}}r</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="form" #formElement>
     <div class="mb-3">
       <label for="name" class="form-label x-small text-muted mb-1">Name</label>
-      <input
-        type="text"
-        id="name"
-        class="form-control"
-        formControlName="name"
-      />
-      @if (accountsForm.get('name')?.invalid &&
-      accountsForm.get('name')?.touched) {
+      <input type="text" id="name" class="form-control" formControlName="name" />
+      @if (form.get('name')?.invalid && form.get('name')?.touched)
+      {
       <div class="text-danger x-small fw-bold">Name is required</div>
       }
     </div>
@@ -23,8 +19,8 @@
         class="form-control"
         formControlName="amount"
       />
-      @if (accountsForm.get('amount')?.invalid &&
-      accountsForm.get('amount')?.touched) {
+      @if (form.get('amount')?.invalid &&
+      form.get('amount')?.touched) {
       <div class="text-danger x-small fw-bold">Amount is required</div>
       }
     </div>
@@ -38,10 +34,14 @@
         <option value="EUR">EUR</option>
         <option value="PLN">PLN</option>
       </select>
-      @if (accountsForm.get('currency')?.invalid &&
-      accountsForm.get('currency')?.touched) {
+      @if (form.get('currency')?.invalid &&
+      form.get('currency')?.touched) {
       <div class="text-danger x-small fw-bold">Currency is required</div>
       }
     </div>
   </form>
-</app-modal>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="cancel">Anuluj</button>
+  <button mat-button (click)="onSave()" mat-dialog-close="save">Zapisz</button>
+</mat-dialog-actions>

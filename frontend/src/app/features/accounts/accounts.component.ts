@@ -3,10 +3,10 @@ import { Subscription } from 'rxjs';
 
 import { AccountsService } from './accounts.service';
 import { TableConfig } from '../../shared/model/table-config.model';
-import { AccountType } from './account.model';
 import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
 import { AccountSectionComponent } from './account-section/account-section.component';
 import { AccountsFormComponent } from './accounts-form/accounts-form.component';
+import { AccountType } from '../../shared/defs/accounts';
 
 @Component({
   selector: 'app-accounts',

@@ -4,9 +4,9 @@ import { AccountListHeaderComponent } from './account-list-header/account-list-h
 import { AccountItemComponent } from './account-item/account-item.component';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import { ColumnType, TableConfig } from '../../../shared/model/table-config.model';
-import { AccountType } from '../../accounts/account.model';
 import { AccountsService } from '../../accounts/accounts.service';
 import { Subscription } from 'rxjs';
+import { AccountType } from '../../../shared/defs/accounts';
 
 @Component({
   selector: 'app-accounts-list',

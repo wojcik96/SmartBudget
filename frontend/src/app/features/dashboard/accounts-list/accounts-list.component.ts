@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 
-import { AccountListHeaderComponent } from './account-list-header/account-list-header.component';
-import { AccountItemComponent } from './account-item/account-item.component';
 import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import { ColumnType, TableConfig } from '../../../shared/model/table-config.model';
-import { AccountsService } from '../../accounts/accounts.service';
 import { Subscription } from 'rxjs';
 import { AccountType } from '../../../shared/defs/accounts';
+import { AccountsService } from '../../accounts/services/accounts.service';
 
 @Component({
   selector: 'app-accounts-list',
@@ -14,8 +12,6 @@ import { AccountType } from '../../../shared/defs/accounts';
   templateUrl: './accounts-list.component.html',
   styleUrl: './accounts-list.component.scss',
   imports: [
-    AccountListHeaderComponent,
-    AccountItemComponent,
     DataTableComponent,
   ],
 })

@@ -1,26 +1,26 @@
 import { Component, inject, Input } from '@angular/core'
 
-import { AccountsService } from '../accounts.service'
-import { TableConfig } from '../../../shared/model/table-config.model'
+import { TableConfig } from '../../../../shared/model/table-config.model'
 import {
   RowAction,
   RowActionType,
-} from '../../../shared/model/row-action.model'
-import { DataTableComponent } from '../../../shared/components/data-table/data-table.component'
-import { AccountsFormComponent } from '../accounts-form/accounts-form.component'
+} from '../../../../shared/model/row-action.model'
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
-import { AccountType } from '../../../shared/defs/accounts'
+import { AccountType } from '../../../../shared/defs/accounts'
+import { AccountsService } from '../../services/accounts.service'
+import { AccountsFormComponent } from '../accounts-form/accounts-form.component'
 
 @Component({
   selector: 'app-account-section',
   standalone: true,
   templateUrl: './account-section.component.html',
   styleUrl: './account-section.component.scss',
-  imports: [DataTableComponent, AccountsFormComponent, MatDialogModule],
+  imports: [DataTableComponent, MatDialogModule],
 })
 export class AccountSectionComponent {
   private accountsService = inject(AccountsService)
-  readonly dialog = inject(MatDialog)
+  private dialog = inject(MatDialog)
 
   @Input({ required: true }) config!: TableConfig
   @Input({ required: true }) accountType!: AccountType

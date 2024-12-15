@@ -1,14 +1,11 @@
-import { Injectable } from '@angular/core';
-import { generateId } from '../../shared/utils/id-generator';
-import { BehaviorSubject } from 'rxjs';
-import { loadDataFromLS, saveDataToLS } from '../../shared/utils/localStorage';
-import { ColumnType } from '../../shared/model/table-config.model';
-import { StatusOption } from '../../shared/model/status-type.model';
-import {
-  AccountDetails,
-  AccountsFormData,
-  AccountType,
-} from '../../shared/defs/accounts';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { AccountDetails, AccountType, AccountsFormData } from "../../../shared/defs/accounts";
+import { StatusOption } from "../../../shared/model/status-type.model";
+import { ColumnType } from "../../../shared/model/table-config.model";
+import { generateId } from "../../../shared/utils/id-generator";
+import { loadDataFromLS, saveDataToLS } from "../../../shared/utils/localStorage";
+
 
 @Injectable({
   providedIn: 'root',
@@ -69,6 +66,14 @@ export class AccountsService {
     }, 0);
   }
 
+  public saveDetails(type: AccountType, data: AccountsFormData): void {
+    if (data.id) {
+      this.updateEntry(data);
+    } else {
+      this.addEntry(type, data);
+    }
+  }
+
   private addEntry(type: AccountType, data: AccountsFormData): void {
     const entryId = generateId(type);
     const newEntry: AccountDetails = {
@@ -89,7 +94,7 @@ export class AccountsService {
     saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
   }
 
-  private updateEntry(type: AccountType, data: AccountsFormData): void {
+  private updateEntry(data: AccountsFormData): void {
     const updatedAccounts = this.accountsSubject
       .getValue()
       .map((account) => {
@@ -106,14 +111,6 @@ export class AccountsService {
 
     this.accountsSubject.next(updatedAccounts);
     saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
-  }
-
-  public saveDetails(type: AccountType, data: AccountsFormData): void {
-    if (data.id) {
-      this.updateEntry(type, data);
-    } else {
-      this.addEntry(type, data);
-    }
   }
 
   public removeEntry(accountId: string): void {

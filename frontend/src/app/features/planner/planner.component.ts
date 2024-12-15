@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
-import { BudgetsListComponent } from './budgets-list/budgets-list.component';
+import { BudgetsListComponent } from './components/budgets-list/budgets-list.component';
 
 @Component({
   selector: 'app-planner',

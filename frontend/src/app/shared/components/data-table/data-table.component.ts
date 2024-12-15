@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 
 import { TableConfig } from '../../model/table-config.model';
 import { RowAction, RowActionType } from '../../model/row-action.model';
 import { CurrencyValueDirective } from '../../directives/currency-value.directive';
 import { ColumnType } from '../../model/table-config.model';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-data-table',
   standalone: true,
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss',
-  imports: [CurrencyValueDirective]
+  imports: [CurrencyValueDirective, MatDialogModule]
 })
 export class DataTableComponent {
   @Input({ required: true }) tableConfig!: TableConfig;

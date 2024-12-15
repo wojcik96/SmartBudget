@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core'
 
-import { ModalService } from '../../shared/components/modal/modal.service';
-import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
-import { CategoryListComponent } from './category-list/category-list.component';
-import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component'
+import { CategoryListComponent } from './category-list/category-list.component'
+import { TransactionListComponent } from './components/transaction-list/transaction-list.component'
+import { TransactionFormComponent } from './components/transaction-form/transaction-form.component'
+import { MatDialog } from '@angular/material/dialog'
 
 @Component({
   selector: 'app-transaction',
@@ -15,17 +15,16 @@ import { TransactionFormComponent } from './transaction-form/transaction-form.co
     WrapperComponent,
     CategoryListComponent,
     TransactionListComponent,
-    TransactionFormComponent,
   ],
 })
 export class TransactionComponent {
-  constructor(private modalService: ModalService) {}
+  private dialog = inject(MatDialog)
 
-  addTransaction() {
-    this.modalService.open({
-      title: 'Add transaction',
-      saveButtonLabel: 'Add',
-      closeButtonLabel: 'Cancel',
-    });
+  openNewTransactionDialog() {
+    this.dialog.open<TransactionFormComponent>(TransactionFormComponent, {
+      data: {
+        title: 'Dodaj Transakcję',
+      },
+    })
   }
 }

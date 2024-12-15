@@ -2,8 +2,8 @@ import { Component } from '@angular/core'
 
 import { FinancialCardComponent } from './financial-card/financial-card.component'
 import { FinancialCard } from './financial-card.model'
-import { AccountsService } from '../../accounts/accounts.service'
 import { CategoryService } from '../../transaction/category-list/category.service'
+import { AccountsService } from '../../accounts/services/accounts.service'
 
 @Component({
   selector: 'app-financial-cards',

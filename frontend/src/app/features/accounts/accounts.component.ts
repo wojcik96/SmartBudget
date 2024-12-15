@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AccountsService } from './accounts.service';
 import { TableConfig } from '../../shared/model/table-config.model';
 import { WrapperComponent } from '../../shared/components/wrapper/wrapper.component';
-import { AccountSectionComponent } from './account-section/account-section.component';
-import { AccountsFormComponent } from './accounts-form/accounts-form.component';
+import { AccountSectionComponent } from './components/account-section/account-section.component';
 import { AccountType } from '../../shared/defs/accounts';
+import { AccountsService } from './services/accounts.service';
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.scss'],
-  imports: [WrapperComponent, AccountSectionComponent, AccountsFormComponent],
+  imports: [WrapperComponent, AccountSectionComponent],
 })
 export class AccountsComponent {
   private accountsSubscription!: Subscription;

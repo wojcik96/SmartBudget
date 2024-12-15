@@ -1,9 +1,8 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 
 import { BudgetItemComponent } from './budget-item/budget-item.component'
-import { BudgetItem } from './budget-item.model'
-import { PlannerService } from '../../planner/planner.service'
-import { Categories } from '../../../shared/model/category.enum'
+import { PlannerService } from '../../planner/services/planner.service'
+import { BudgetBarItem } from '../../../shared/defs/budgets'
 
 @Component({
   selector: 'app-budgets',
@@ -13,8 +12,9 @@ import { Categories } from '../../../shared/model/category.enum'
   imports: [BudgetItemComponent],
 })
 export class BudgetsComponent {
-  budgets: BudgetItem[] = []
-  constructor(private plannerService: PlannerService) {}
+  private plannerService = inject(PlannerService)
+
+  public budgets: BudgetBarItem[] = []
 
   ngOnInit() {
     this.plannerService.budgetsSummary$.subscribe((data) => {

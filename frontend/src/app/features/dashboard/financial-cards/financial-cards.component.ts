@@ -1,9 +1,10 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 
 import { FinancialCardComponent } from './financial-card/financial-card.component'
 import { FinancialCard } from './financial-card.model'
-import { CategoryService } from '../../transaction/category-list/category.service'
 import { AccountsService } from '../../accounts/services/accounts.service'
+import { CategoryService } from '../../transaction/category-list/category.service'
+import { TransactionService } from '../../transaction/services/transaction.service'
 
 @Component({
   selector: 'app-financial-cards',
@@ -13,7 +14,9 @@ import { AccountsService } from '../../accounts/services/accounts.service'
   imports: [FinancialCardComponent],
 })
 export class FinancialCardsComponent {
-  constructor(private accountsService: AccountsService, private categoryService: CategoryService) {}
+  private accountsService = inject(AccountsService)
+  private transactionService = inject(TransactionService)
+  
 
   financialCards: FinancialCard[] = [
     {
@@ -25,13 +28,13 @@ export class FinancialCardsComponent {
     {
       icon: 'bi-graph-up-arrow',
       title: 'Income',
-      value: this.categoryService.getIncomeValue(),
+      value: this.transactionService.incomeAmount(),
       currency: 'PLN',
     },
     {
       icon: 'bi-graph-down-arrow',
       title: 'Expenses',
-      value: this.categoryService.getAllExpenses(),
+      value: this.transactionService.expensesAmount(),
       currency: 'PLN',
     },
   ]

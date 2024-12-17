@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 
 import { Category } from './model/category.model'
 import { CategorySummary } from './model/category-summary.model'
 import { BehaviorSubject } from 'rxjs'
-import { loadDataFromLS, saveDataToLS } from '../../../shared/utils/localStorage'
+import {
+  loadDataFromLS,
+  saveDataToLS,
+} from '../../../shared/utils/localStorage'
 import { Categories } from '../../../shared/model/category.enum'
+import { TransactionService } from '../services/transaction.service'
 
 type CategorySummaryMapType = { [key: string]: CategorySummary }
 
@@ -12,26 +16,22 @@ type CategorySummaryMapType = { [key: string]: CategorySummary }
   providedIn: 'root',
 })
 export class CategoryService {
+  private transactionsService = inject(TransactionService)
   private CATEGORY_SUMMARY_KEY = 'SmBu-catSumm'
-  private categorySummaryMap = loadDataFromLS(this.CATEGORY_SUMMARY_KEY) || this.getDefaultCategorySummary()
+  private categorySummaryMap =
+    loadDataFromLS(this.CATEGORY_SUMMARY_KEY) ||
+    this.getDefaultCategorySummary()
   private categorySummarySubject = new BehaviorSubject<CategorySummaryMapType>(
     this.categorySummaryMap
   )
-  categorySumarry$ = this.categorySummarySubject.asObservable()
+  categorySummary$ = this.categorySummarySubject.asObservable()
 
-  getAvailableCategories(): Category[] {
-    return this.allCategories
-  }
-
-  getAllCategorySummaries(): CategorySummary[] {
-    return Object.values(this.categorySummaryMap)
-  }
-
-  getCategoryLabelById(categoryId: string): string {
-    return (
-      this.allCategories.find((category) => category.id === categoryId)
-        ?.label || ''
-    )
+  constructor() {
+    this.transactionsService.transaction$.subscribe((transactions) => {
+      transactions.forEach((transaction) =>
+        this.updateCategoryAmount(transaction.categoryId, transaction.amount)
+      )
+    })
   }
 
   updateCategoryAmount(categoryId: string, amount: number) {
@@ -44,24 +44,28 @@ export class CategoryService {
     }
   }
 
+  getAvailableCategories(): Category[] {
+    return this.allCategories
+  }
+
+  getAllCategorySummaries(): CategorySummary[] {
+    return Object.values(this.categorySummaryMap)
+  }
+
+  getCategoryLabelById(categoryId: string): string {
+    // TODO: Jest wykorzystane w Planner
+    return (
+      this.allCategories.find((category) => category.id === categoryId)
+        ?.label || ''
+    )
+  }
+
   getCategoryAmountById(categoryId: string) {
+    // TODO: Jest wykorzystane w Planner
     return this.categorySummaryMap[categoryId].amount
   }
 
-  getIncomeValue() {
-    return this.categorySummarySubject.value['cat-1'].amount;
-  }
-  
-  getAllExpenses() {
-    let allExpenses = 0; 
-    for (const [key, value] of Object.entries(this.categorySummarySubject.value)) {
-      if (value.amount < 0) allExpenses += value.amount; 
-    }
-
-    return allExpenses;
-  }
-
-  // TODO: Wywalić na backend
+  // TODO: Na backend
   private allCategories: Category[] = [
     {
       id: 'cat-1',

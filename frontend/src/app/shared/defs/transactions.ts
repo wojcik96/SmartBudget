@@ -4,6 +4,7 @@ export type TransactionForm = FormGroup<{
   title: FormControl<string | null>
   date: FormControl<string | null>
   type: FormControl<TransactionType | null>
+  accountId: FormControl<string | null>
   categoryId: FormControl<string | null>
   amount: FormControl<number | null>
 }>
@@ -16,6 +17,8 @@ export enum TransactionType {
 export interface Transaction {
   id: string
   createdDate: string
+  accountId: string
+  accountName: string
   date: string
   title: string
   amount: number
@@ -31,5 +34,7 @@ export interface TransactionFormData {
   title: string
   amount: number
   categoryId: string
+  accountId: string
+  accountName: string
   type: TransactionType
 }

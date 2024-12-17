@@ -58,6 +58,21 @@
 
     <div class="mb-3">
       <label for="category" class="form-label x-small text-muted mb-1"
+        >Account</label
+      >
+      <select id="category" class="form-select" formControlName="accountId">
+        <option value="">Select an account</option>
+        @for (account of accountsList(); track account.id) {
+        <option [value]="account.id">{{ account.name + ' - ' + account.currency }}</option>
+        }
+      </select>
+      @if (form.get('accountId')?.invalid && form.get('accountId')?.touched) {
+      <div class="text-danger x-small fw-bold">Account is required</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label x-small text-muted mb-1"
         >Category</label
       >
       <select id="category" class="form-select" formControlName="categoryId">

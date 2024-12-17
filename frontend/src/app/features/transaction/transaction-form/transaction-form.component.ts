@@ -1,15 +1,18 @@
 import { Component, DestroyRef, inject } from '@angular/core'
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop'
 import { map, filter } from 'rxjs'
 
-import { CategoryService } from '../../category-list/category.service'
-import { Category } from '../../category-list/model/category.model'
+import { CategoryService } from '../category-list/category.service'
+import { Category } from '../category-list/model/category.model'
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
-import { TransactionFormModel } from '../../models/transaction-form.model'
-import { TransactionType } from '../../../../shared/defs/transactions'
-import { TransactionService } from '../../services/transaction.service'
+import { TransactionFormModel } from '../models/transaction-form.model'
+import { TransactionType } from '../../../shared/defs/transactions'
+import { TransactionService } from '../services/transaction.service'
+import { AccountsService } from '../../accounts/services/accounts.service'
+import { AccountDetails, AccountType } from '../../../shared/defs/accounts'
+import { adjustAmountBasedOnType } from '../../../shared/utils/numbers'
 
 @Component({
   selector: 'app-transaction-form',
@@ -21,9 +24,11 @@ import { TransactionService } from '../../services/transaction.service'
 export class TransactionFormComponent {
   private destroyRef = inject(DestroyRef)
   private transactionService = inject(TransactionService)
+  private accountsService = inject(AccountsService)
   private categoryService = inject(CategoryService)
   private formBuilder = inject(FormBuilder)
 
+  protected accountsList = toSignal(this.accountsService.accounts$)
   protected form = TransactionFormModel.getForm(this.formBuilder)
   protected data = inject<{
     type: 'todo'
@@ -42,6 +47,7 @@ export class TransactionFormComponent {
   private saveForm(data: any): void {
     const transactionDetails = {
       id: this.data.elementId,
+      accountName: this.accountsService.getAccountLabelById(data.accountId),
       ...data,
     }
 
@@ -73,11 +79,12 @@ export class TransactionFormComponent {
         filter((data) => data.length > 0)
       )
       .subscribe((data) => {
-        const { amount, categoryId, date, title, type, currency } = data[0]
+        const { amount, categoryId, accountId, date, title, type } = data[0]
 
         this.form.patchValue({
           amount,
           categoryId,
+          accountId,
           date,
           title,
           type,

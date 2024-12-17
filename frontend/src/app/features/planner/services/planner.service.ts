@@ -61,11 +61,11 @@ export class PlannerService {
   )
   budgetsSummary$ = this.budgetsSummarySubject.asObservable()
 
-  // constructor(private categoryService: CategoryService) {
-  //   this.categoryService.categorySumarry$.subscribe(() => {
-  //     this.updateBudgets();
-  //   });
-  // }
+  constructor() {
+    this.categoryService.categorySummary$.subscribe(() => {
+      this.updateBudgetsData();
+    });
+  }
 
   // private addBudget({ categoryId, currency, plannedAmount }: newBudgetType) {
 
@@ -89,24 +89,24 @@ export class PlannerService {
   //   saveDataToLS(this.SUMMARY_MAP_KEY, this.budgetsSummarySubject.value);
   // }
 
-  // private updateBudgets() {
-  //   const updatedBudgets = this.budgetsSummarySubject.value.map((budget) => {
-  //     const actualExpenses = this.categoryService.getCategoryAmountById(
-  //       budget.categoryId
-  //     );
-  //     const difference = this.countDifference(
-  //       budget.plannedAmount,
-  //       actualExpenses
-  //     );
-  //     return {
-  //       ...budget,
-  //       actualExpenses,
-  //       difference,
-  //       status: this.setStatus(difference),
-  //     };
-  //   });
-  //   this.budgetsSummarySubject.next(updatedBudgets);
-  // }
+  private updateBudgetsData() {
+    const updatedBudgets = this.budgetsSummarySubject.value.map((budget) => {
+      const actualExpenses = this.categoryService.getCategoryAmountById(
+        budget.categoryId
+      );
+      const difference = this.countDifference(
+        budget.plannedAmount,
+        actualExpenses
+      );
+      return {
+        ...budget,
+        actualExpenses,
+        difference,
+        status: this.setStatus(difference),
+      };
+    });
+    this.budgetsSummarySubject.next(updatedBudgets);
+  }
 
   private addBudget(data: BudgetFormData): void {
     const actualExpenses = this.categoryService.getCategoryAmountById(

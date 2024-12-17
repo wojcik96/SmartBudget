@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core'
 
-import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component'
+import { DataTableComponent } from '../../../shared/components/data-table/data-table.component'
 import {
   ColumnType,
   TableConfig,
-} from '../../../../shared/model/table-config.model'
+} from '../../../shared/model/table-config.model'
 import {
   RowAction,
   RowActionType,
-} from '../../../../shared/model/row-action.model'
-import { TransactionFormComponent } from '../transaction-form/transaction-form.component'
+} from '../../../shared/model/row-action.model'
 import { MatDialog } from '@angular/material/dialog'
-import { TransactionService } from '../../services/transaction.service'
+import { TransactionService } from '../services/transaction.service'
+import { TransactionFormComponent } from '../transaction-form/transaction-form.component'
 
 @Component({
   selector: 'app-transaction-list',
@@ -26,6 +26,7 @@ export class TransactionListComponent {
   private transactionTableColumns = [
     { label: 'Date', key: 'date', cssClass: 'col-2' },
     { label: 'Title', key: 'title', cssClass: 'col', type: ColumnType.NAME },
+    { label: 'Account', key: 'accountName', cssClass: 'col-2'},
     { label: 'Category', key: 'categoryName', cssClass: 'col-3' },
     {
       label: 'Amount',

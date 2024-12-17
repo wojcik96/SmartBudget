@@ -1,22 +1,47 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { AccountDetails, AccountType, AccountsFormData } from "../../../shared/defs/accounts";
-import { StatusOption } from "../../../shared/model/status-type.model";
-import { ColumnType } from "../../../shared/model/table-config.model";
-import { generateId } from "../../../shared/utils/id-generator";
-import { loadDataFromLS, saveDataToLS } from "../../../shared/utils/localStorage";
-
+import { computed, effect, inject, Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
+import {
+  AccountDetails,
+  AccountType,
+  AccountsFormData,
+} from '../../../shared/defs/accounts'
+import { StatusOption } from '../../../shared/model/status-type.model'
+import { ColumnType } from '../../../shared/model/table-config.model'
+import { generateId } from '../../../shared/utils/id-generator'
+import {
+  loadDataFromLS,
+  saveDataToLS,
+} from '../../../shared/utils/localStorage'
+import { TransactionService } from '../../transaction/services/transaction.service'
+import { toSignal } from '@angular/core/rxjs-interop'
+import { Transaction } from '../../../shared/defs/transactions'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountsService {
-  private ACCOUNT_LIST_KEY = 'SmBu-AccLis';
-  private accountsListSummary = loadDataFromLS(this.ACCOUNT_LIST_KEY) || [];
+  private transactionService = inject(TransactionService)
+  private ACCOUNT_LIST_KEY = 'SmBu-AccLis'
+  private accountsListSummary = loadDataFromLS(this.ACCOUNT_LIST_KEY) || []
   private accountsSubject = new BehaviorSubject<AccountDetails[]>(
     this.accountsListSummary
-  );
-  public accounts$ = this.accountsSubject.asObservable();
+  )
+  public accounts$ = this.accountsSubject.asObservable()
+
+  protected transactions = toSignal(this.transactionService.transaction$)
+
+  readonly accountsData = computed(() => {
+    this.transactions
+  })
+
+  constructor() {
+    effect(
+      () => {
+        this.updateAccountsBalance(this.transactions())
+      },
+      { allowSignalWrites: true }
+    )
+  }
 
   private accountTableColumns = [
     {
@@ -38,7 +63,7 @@ export class AccountsService {
       cssClass: 'col-2 text-end',
       type: ColumnType.CURRENCY,
     },
-  ];
+  ]
 
   private walletsTableColumns = [
     { label: 'Name', key: 'name', cssClass: 'col-4', type: ColumnType.NAME },
@@ -50,32 +75,44 @@ export class AccountsService {
       type: ColumnType.CURRENCY,
     },
     { label: '', key: 'empty', cssClass: 'col-2 text-end' },
-  ];
-
-  public getWalletsTableColumns() {
-    return this.walletsTableColumns;
-  }
-
-  public getAccountsTableColumns() {
-    return this.accountTableColumns;
-  }
+  ]
 
   public getAllBalance() {
     return this.accountsSubject.value.reduce((balance, account) => {
-      return balance + account.balance;
-    }, 0);
+      return balance + account.balance
+    }, 0)
   }
 
   public saveDetails(type: AccountType, data: AccountsFormData): void {
     if (data.id) {
-      this.updateEntry(data);
+      this.updateEntry(data)
     } else {
-      this.addEntry(type, data);
+      this.addEntry(type, data)
     }
   }
 
+  private updateAccountsBalance(transaction: Transaction[] | undefined): void {
+    if (!transaction) {
+      return
+    }
+
+    const updatedAccounts = this.accountsSubject.getValue().map((account) => {
+      const totalBalance = transaction
+        .filter((transaction) => transaction.accountId === account.id)
+        .reduce((sum, transaction) => sum + transaction.amount, 0)
+
+      return {
+        ...account,
+        balance: totalBalance,
+      }
+    })
+
+    this.accountsSubject.next(updatedAccounts)
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value)
+  }
+
   private addEntry(type: AccountType, data: AccountsFormData): void {
-    const entryId = generateId(type);
+    const entryId = generateId(type)
     const newEntry: AccountDetails = {
       id: entryId,
       name: data.name,
@@ -83,42 +120,70 @@ export class AccountsService {
       currency: data.currency,
       createDate: new Date().toLocaleDateString(),
       accountType: type,
-    };
-
-    if (type === AccountType.Bank) {
-      newEntry.status = { type: StatusOption.SUCCESS, label: 'Active' };
-      newEntry.lastImportDate = new Date().toLocaleDateString();
     }
 
-    this.accountsSubject.next([...this.accountsSubject.getValue(), newEntry]);
-    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
+    if (type === AccountType.Bank) {
+      newEntry.status = { type: StatusOption.SUCCESS, label: 'Active' }
+      newEntry.lastImportDate = new Date().toLocaleDateString()
+    }
+
+    this.accountsSubject.next([...this.accountsSubject.getValue(), newEntry])
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value)
   }
 
   private updateEntry(data: AccountsFormData): void {
-    const updatedAccounts = this.accountsSubject
-      .getValue()
-      .map((account) => {
-        if (account.id === data.id) {
-          return {
-            ...account,
-            balance: data.amount,
-            currency: data.currency,
-            name: data.name,
-          };
+    const updatedAccounts = this.accountsSubject.getValue().map((account) => {
+      if (account.id === data.id) {
+        return {
+          ...account,
+          balance: data.amount,
+          currency: data.currency,
+          name: data.name,
         }
-        return account;
-      });
+      }
+      return account
+    })
 
-    this.accountsSubject.next(updatedAccounts);
-    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
+    this.accountsSubject.next(updatedAccounts)
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value)
   }
 
   public removeEntry(accountId: string): void {
     const updatedAccounts = this.accountsSubject
       .getValue()
-      .filter((account) => account.id !== accountId);
+      .filter((account) => account.id !== accountId)
 
-    this.accountsSubject.next(updatedAccounts);
-    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value);
+    this.accountsSubject.next(updatedAccounts)
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value)
+  }
+
+  public updateAccount(id: string, amount: number): void {
+    const updatedAccounts = this.accountsSubject.getValue().map((account) => {
+      if (account.id === id) {
+        return {
+          ...account,
+          balance: account.balance + amount,
+        }
+      }
+      return account
+    })
+
+    this.accountsSubject.next(updatedAccounts)
+    saveDataToLS(this.ACCOUNT_LIST_KEY, this.accountsSubject.value)
+  }
+
+  public getWalletsTableColumns() {
+    return this.walletsTableColumns
+  }
+
+  public getAccountsTableColumns() {
+    return this.accountTableColumns
+  }
+
+  public getAccountLabelById(id: string): string {
+    return (
+      this.accountsSubject.getValue().find((account) => account.id === id)
+        ?.name || ''
+    )
   }
 }

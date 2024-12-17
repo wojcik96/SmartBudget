@@ -8,6 +8,7 @@ export class TransactionFormModel {
         title: ['', Validators.required],
         date: ['', Validators.required],
         type: ['income' as TransactionType, Validators.required],
+        accountId: ['', Validators.required],
         categoryId: ['cat-1', Validators.required],
         amount: [
           0,

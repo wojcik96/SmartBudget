@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core'
 
-import { NavComponent } from './nav/nav.component';
-import { LogoComponent } from '../../../shared/components/logo/logo.component';
+import { NavComponent } from './nav/nav.component'
+import { LogoComponent } from '../../../shared/components/logo/logo.component'
+import { AuthService } from '../../../shared/services/auth.service'
+import { toSignal } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  imports: [RouterLink, NavComponent, LogoComponent],
+  imports: [NavComponent, LogoComponent],
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  private authService = inject(AuthService)
+
+  protected isLogIn = toSignal(this.authService.loggedInStatus$)
+}

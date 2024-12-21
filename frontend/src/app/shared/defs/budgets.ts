@@ -29,6 +29,7 @@ export interface BudgetFormData {
 
 export type BudgetBarItem = {
     category: string,
+    categoryId: string,
     amount: number,
     spent: number,
     progress: number,

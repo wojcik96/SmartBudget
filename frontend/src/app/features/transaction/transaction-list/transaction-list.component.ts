@@ -24,9 +24,9 @@ export class TransactionListComponent {
   private dialog = inject(MatDialog)
   private transactionService = inject(TransactionService)
   private transactionTableColumns = [
-    { label: 'Date', key: 'date', cssClass: 'col-2' },
-    { label: 'Title', key: 'title', cssClass: 'col', type: ColumnType.NAME },
-    { label: 'Account', key: 'accountName', cssClass: 'col-2'},
+    { label: 'Date', key: 'date', cssClass: 'col' },
+    { label: 'Title', key: 'title', cssClass: 'col-2', type: ColumnType.NAME },
+    { label: 'Account', key: 'accountName', cssClass: 'col-2' },
     { label: 'Category', key: 'categoryName', cssClass: 'col-3' },
     {
       label: 'Amount',
@@ -34,6 +34,7 @@ export class TransactionListComponent {
       cssClass: 'col-2',
       type: ColumnType.CURRENCY,
     },
+    { label: 'Type', key: 'type', cssClass: 'col text-uppercase' },
   ]
   tableConfig!: TableConfig
 

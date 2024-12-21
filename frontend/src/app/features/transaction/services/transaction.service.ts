@@ -162,6 +162,13 @@ export class TransactionService {
       .reduce((sum, transaction) => sum + transaction.amount, 0)
   }
 
+  public getCategoryColorById(categoryId: string): string {
+    return (
+      this.allCategories.find((category) => category.id === categoryId)
+        ?.color || ''
+    )
+  }
+
   public saveDetails(data: Transaction): void {
     if (data.id) {
       this.updateTransaction(data)

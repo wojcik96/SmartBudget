@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core'
 import { BudgetItemComponent } from './budget-item/budget-item.component'
 import { PlannerService } from '../../planner/services/planner.service'
 import { BudgetBarItem } from '../../../shared/defs/budgets'
+import { TransactionService } from '../../transaction/services/transaction.service'
 
 @Component({
   selector: 'app-budgets',
@@ -13,6 +14,7 @@ import { BudgetBarItem } from '../../../shared/defs/budgets'
 })
 export class BudgetsComponent {
   private plannerService = inject(PlannerService)
+  private transactionService = inject(TransactionService)
 
   public budgets: BudgetBarItem[] = []
 
@@ -21,13 +23,14 @@ export class BudgetsComponent {
       data.forEach((budget) => {
         this.budgets.push({
           category: budget.categoryName,
+          categoryId: budget.categoryId,
           amount: budget.plannedAmount,
           currency: budget.currency,
           progress: this.calculatePercentage(
             budget.actualExpenses,
             budget.plannedAmount
           ),
-          progressColor: 'red',
+          progressColor: this.transactionService.getCategoryColorById(budget.categoryId),
           spent: budget.actualExpenses,
         })
       })

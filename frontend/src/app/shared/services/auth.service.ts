@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 export interface User {
@@ -15,6 +16,8 @@ export interface JWTToken {
   providedIn: 'root',
 })
 export class AuthService {
+  private router = inject(Router)
+
   public isAuthenticatedSubject = new BehaviorSubject<boolean>(false)
   public loggedInStatus$ = this.isAuthenticatedSubject.asObservable()
 
@@ -37,6 +40,7 @@ export class AuthService {
 
   public logout(): void {
     localStorage.removeItem('token')
+    this.router.navigate(['/login']);
     this.setLoggedIn(false)
   }
 

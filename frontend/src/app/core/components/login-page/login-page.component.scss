@@ -1,8 +1,64 @@
-:host {
-  display: flex;
-  justify-content: center;
+.login-container {
+  max-width: 450px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
 
-  .container {
-    max-width: 500px;
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+button[type='button'] {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.register-btn {
+  width: 100%;
+  margin-top: 16px;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.register-btn:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+mat-error {
+  font-size: 12px;
+  color: #f44336;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    padding: 15px;
+    margin-top: 30px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  button[type='button'],
+  .register-btn {
+    font-size: 14px;
   }
 }

@@ -1,45 +1,115 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
+import { Component, inject, signal } from '@angular/core'
+import {
+  Validators,
+  ReactiveFormsModule,
+  NonNullableFormBuilder,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms'
+import { Router, RouterLink } from '@angular/router'
+import { RegisterService } from './services/register.service'
+import { catchError, EMPTY, finalize, tap } from 'rxjs'
+import { MatButtonModule } from '@angular/material/button'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
+import { ToastService } from '../../../shared/services/toast.service'
+import { HttpErrorResponse } from '@angular/common/http'
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component'
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    SpinnerComponent,
+  ],
   templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.scss'
+  styleUrl: './register-page.component.scss',
 })
 export class RegisterPageComponent {
-  registerForm: FormGroup;
-  errorMessage: string | null = null;
+  private formBuilder = inject(NonNullableFormBuilder)
+  private router = inject(Router)
+  private registerService = inject(RegisterService)
+  private toastService = inject(ToastService)
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
-    this.registerForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-    }, { validators: this.passwordsMatchValidator });
+  protected showSpinner = signal(false)
+  protected form = this.formBuilder.group({
+    login: ['', Validators.required],
+    firstName: [''],
+    lastName: [''],
+    email: ['', [Validators.required, Validators.email]],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/
+        ),
+      ],
+    ],
+    confirmPassword: ['', [Validators.required, this.validateSamePassword]],
+  })
+
+  private validateSamePassword(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const password = control.parent?.get('password')
+    const confirmPassword = control.parent?.get('confirmPassword')
+    return password?.value == confirmPassword?.value ? null : { passwordMismatch: true }
   }
 
-  passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
-    const password = group.get('password')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
+  private saveForm() {
+    this.showSpinner.set(true)
+
+    this.registerService
+      .addUser(this.form.getRawValue())
+      .pipe(
+        catchError((err) => {
+          this.openErrorToast(err)
+          return EMPTY
+        }),
+        tap(() => {
+          this.openSuccessToast()
+        }),
+        finalize(() => {
+          this.showSpinner.set(false)
+        })
+      )
+      .subscribe(() => {
+        this.router.navigate(['/login'])
+      })
   }
 
-  onSubmit() {
-    if (this.registerForm.valid) {
-      const { username, password } = this.registerForm.value;
-      const success = this.authService.register({username, password});
 
-      if (success) {
-        this.router.navigate(['/login']); 
-      } else {
-        this.errorMessage = 'Username is already taken.';
+  private openSuccessToast(): void {
+    this.toastService.openSuccessToast('Register successful!', 'success', {
+      horizontalPosition: 'right',
+      duration: 3000,
+    })
+  }
+
+  private openErrorToast(err: HttpErrorResponse): void {
+    this.toastService.openSuccessToast(
+      `${err.error.message}, please try again!`,
+      'error',
+      {
+        horizontalPosition: 'right',
+        duration: 5000,
       }
-    } else {
-      this.errorMessage = 'Please fill in all fields correctly.';
+    )
+  }
+
+  public onSubmitBtnClick(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched()
+      return
     }
+
+    this.saveForm()
   }
 }

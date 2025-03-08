@@ -14,9 +14,9 @@ const passwordRegEx =
 
 export class CreateUserDto {
   @IsString()
-  @MinLength(2, { message: 'Name must have atleast 2 characters.' })
+  @MinLength(2, { message: 'Login must have atleast 2 characters.' })
   @IsNotEmpty()
-  name: string;
+  login: string;
 
   @IsNotEmpty()
   @MinLength(3, { message: 'First name must have atleast 3 characters.' })

@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
   private router = inject(Router)
 
   canActivate(): boolean {
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isAuthenticated()) {
       return true
     }
     this.router.navigate(['/login'])

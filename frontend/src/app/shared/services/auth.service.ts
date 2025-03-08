@@ -1,12 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { inject, Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { inject, Injectable, signal } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable } from 'rxjs'
-
-export interface User {
-  username: string
-  password: string
-}
+import { BehaviorSubject, Observable, tap } from 'rxjs'
+import { CookieService } from 'ngx-cookie-service'
+import { jwtDecode } from 'jwt-decode'
+import { UserLoginDto } from '../defs/user'
 
 export interface JWTToken {
   access_token: string
@@ -16,36 +14,46 @@ export interface JWTToken {
   providedIn: 'root',
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:3000/auth/login'
   private router = inject(Router)
+  private http = inject(HttpClient)
+  private cookieService = inject(CookieService)
 
-  public isAuthenticatedSubject = new BehaviorSubject<boolean>(false)
-  public loggedInStatus$ = this.isAuthenticatedSubject.asObservable()
+  public tokenChanged = new BehaviorSubject<void>(undefined)
 
-  constructor(private http: HttpClient) {
-    this.isAuthenticatedSubject.next(this.isLoggedIn())
+  // TODO: do przerobienia aby uzyskać wylogowywanie z apki. Aktualnie nie wylogowywuje się.
+  public setToken(token: string | null): void {
+    if (token) {
+      const user = jwtDecode<any>(token)
+
+      this.cookieService.set('jwt', token, {
+        expires: new Date(Date.now() + user.exp),
+      })
+    } else {
+      this.cookieService.delete('jwt')
+    }
+    this.tokenChanged.next()
   }
 
-  public login(data: User): Observable<JWTToken> {
-    return this.http.post<JWTToken>('http://localhost:3000/auth/login', data)
-  }
-
-  private setLoggedIn(status: boolean): void {
-    this.isAuthenticatedSubject.next(status)
-  }
-
-  public isLoggedIn(): boolean {
-    const token = localStorage.getItem('token')
-    return !!token
+  public login(credentials: UserLoginDto): Observable<any> {
+    return this.http.post<JWTToken>(this.apiUrl, credentials).pipe(
+      tap((response) => {
+        this.setToken(response.access_token)
+      })
+    )
   }
 
   public logout(): void {
-    localStorage.removeItem('token')
-    this.router.navigate(['/login']);
-    this.setLoggedIn(false)
+    this.cookieService.delete('jwt')
+    this.tokenChanged.next()
+    this.router.navigate(['/login'])
   }
 
-  public register(data: User): boolean {
-    // TODO
-    return true
+  public isAuthenticated(): boolean {
+    return !!this.getToken()
+  }
+
+  public getToken(): string | null {
+    return this.cookieService.get('jwt') || null
   }
 }

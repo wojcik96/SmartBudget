@@ -1,28 +1,53 @@
-import { Injectable } from '@angular/core'
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-} from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { inject } from '@angular/core'
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http'
+import { catchError, EMPTY, throwError } from 'rxjs'
+import { AuthService } from '../services/auth.service'
+import { Router } from '@angular/router'
+import { ToastService } from '../services/toast.service'
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token')
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService)
+  const toastService = inject(ToastService)
+  const router = inject(Router)
 
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    }
-
-    return next.handle(request)
+  const token = authService.getToken()
+  if (!token) {
+    return next(req).pipe(
+      catchError((err) =>
+        catchLostSessionError(err, authService, router, toastService)
+      )
+    )
   }
+
+  const reqWithToken = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return next(reqWithToken).pipe(
+    catchError((err) =>
+      catchLostSessionError(err, authService, router, toastService)
+    )
+  )
+}
+
+const catchLostSessionError = (
+  err: HttpErrorResponse,
+  authService: AuthService,
+  router: Router,
+  toastService: ToastService
+) => {
+  if (err instanceof HttpErrorResponse && err.status === 401) {
+    authService.setToken(null)
+    router.navigateByUrl('/login')
+    openSessionLostToast(toastService)
+    return EMPTY
+  }
+
+  return throwError(() => err)
+}
+
+const openSessionLostToast = (toastService: ToastService) => {
+  toastService.openSuccessToast('Your session lost! Log-in again!', 'info')
 }

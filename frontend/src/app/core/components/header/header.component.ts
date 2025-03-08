@@ -4,6 +4,7 @@ import { NavComponent } from './nav/nav.component'
 import { LogoComponent } from '../../../shared/components/logo/logo.component'
 import { AuthService } from '../../../shared/services/auth.service'
 import { toSignal } from '@angular/core/rxjs-interop'
+import { AppDataService } from '../../../shared/services/app-data.service'
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop'
   imports: [NavComponent, LogoComponent],
 })
 export class HeaderComponent {
-  private authService = inject(AuthService)
+  private appDataService = inject(AppDataService)
 
-  protected isLogIn = toSignal(this.authService.loggedInStatus$)
+  protected isLogIn = this.appDataService.user
 }

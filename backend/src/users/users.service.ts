@@ -44,28 +44,15 @@ export class UsersService {
     return user;
   }
   // TODO: Zamienić name na coś co oznacza login
-  async getUserByName(name: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ name });
+  async getUserByLogin(login: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ login });
 
-    if (!user) throw new NotFoundException(`User with ${name} not found`);
+    if (!user) throw new NotFoundException(`User with ${login} not found`);
 
     return user;
   }
 
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'admin',
-      password: 'admin',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
-
-  viewUser(id: number): Promise<User> {
+  public viewUser(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id });
   }
 }

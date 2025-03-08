@@ -12,14 +12,13 @@ export class AuthService {
   ) {}
 
   async signIn(name: string, pass: string): Promise<any> {
-    const user = await this.usersService.getUserByName(name);
+    const user = await this.usersService.getUserByLogin(name);
     const isValidPass = await bcrypt.compare(pass, user.password);
 
     if (!isValidPass) {
       throw new UnauthorizedException();
     }
-    // TODO: Tutaj do rozkminienia w filmie #3 5:09
-    const payload = { name: user.name, sub: user.id };
+    const payload = { name: user.login, sub: user.id };
 
     return {
       access_token: await this.jwtService.signAsync(payload),

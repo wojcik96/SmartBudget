@@ -6,10 +6,13 @@ export class User {
   id: number;
 
   @Column({ type: 'varchar', length: 30 })
-  name: string;
+  login: string;
 
   @Column({ type: 'varchar', length: 15 })
-  username: string;
+  firstName: string;
+
+  @Column({ type: 'varchar', length: 15 })
+  lastName: string;
 
   @Column({ type: 'varchar', length: 40 })
   email: string;

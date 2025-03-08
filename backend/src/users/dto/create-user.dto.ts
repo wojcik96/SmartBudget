@@ -19,11 +19,18 @@ export class CreateUserDto {
   name: string;
 
   @IsNotEmpty()
-  @MinLength(3, { message: 'Username must have atleast 3 characters.' })
+  @MinLength(3, { message: 'First name must have atleast 3 characters.' })
   @IsAlphanumeric(null, {
-    message: 'Username does not allow other than alpha numeric chars.',
+    message: 'First name does not allow other than alpha numeric chars.',
   })
-  username: string;
+  firstName: string;
+
+  @IsNotEmpty()
+  @MinLength(3, { message: 'First name must have atleast 3 characters.' })
+  @IsAlphanumeric(null, {
+    message: 'First name does not allow other than alpha numeric chars.',
+  })
+  lastName: string;
 
   @IsNotEmpty()
   @IsEmail(null, { message: 'Please provide valid Email.' })

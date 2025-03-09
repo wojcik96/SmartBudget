@@ -3,19 +3,20 @@
   <div class="row">
     <div class="col-4">
       <div appWrapper>
-        <p class="h4">Kategorie</p>
+        <p class="h4">Categories</p>
         <app-category-list />
       </div>
     </div>
     <div class="col-8">
       <div appWrapper>
-        <div class="d-flex justify-content-between">
-          <p class="h4 mb-0">Transakcje</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <p class="h4 m-0">Transactions</p>
           <button
-            class="btn btn-outline-secondary btn-sm"
+            mat-button
+            class="btn-sm"
             (click)="openNewTransactionDialog()"
           >
-            <i class="bi bi-plus-circle-dotted p-1"></i> Add transactiopn
+            <i class="bi bi-plus-circle-dotted p-1"></i> Add transaction
           </button>
         </div>
         <hr />

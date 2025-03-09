@@ -4,7 +4,9 @@ import { WrapperComponent } from '../../shared/components/wrapper/wrapper.compon
 import { CategoryListComponent } from './category-list/category-list.component'
 import { TransactionListComponent } from './transaction-list/transaction-list.component'
 import { TransactionFormComponent } from './transaction-form/transaction-form.component'
-import { MatDialog } from '@angular/material/dialog'
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog'
+import { MatButtonModule } from '@angular/material/button'
+import { TransactionDialogData } from '../../shared/defs/transactions'
 
 @Component({
   selector: 'app-transaction',
@@ -15,15 +17,16 @@ import { MatDialog } from '@angular/material/dialog'
     WrapperComponent,
     CategoryListComponent,
     TransactionListComponent,
+    MatButtonModule,
   ],
 })
 export class TransactionComponent {
   private dialog = inject(MatDialog)
 
   openNewTransactionDialog() {
-    this.dialog.open<TransactionFormComponent>(TransactionFormComponent, {
+    this.dialog.open<TransactionFormComponent, TransactionDialogData>(TransactionFormComponent, {
       data: {
-        title: 'Dodaj Transakcję',
+        title: 'Add Transaction',
       },
     })
   }

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core'
 
-import { CategoryService } from './category.service';
-import { CategorySummary } from './model/category-summary.model';
-import { CategoryItemComponent } from './category-item/category-item.component';
+import { CategoryService } from './category.service'
+import { CategoryItemComponent } from './category-item/category-item.component'
+import { CategoriesRequestService } from '../../../shared/services/categories-request.service'
+import { toSignal } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-category-list',
@@ -12,11 +13,9 @@ import { CategoryItemComponent } from './category-item/category-item.component';
   imports: [CategoryItemComponent],
 })
 export class CategoryListComponent {
-  categories!: CategorySummary[];
+  private categoriesReqService = inject(CategoriesRequestService)
 
-  constructor(private categoryService: CategoryService) {}
-
-  ngOnInit() {
-    this.categories = this.categoryService.getAllCategorySummaries();
-  }
+  protected categoriesWithExpenses = toSignal(
+    this.categoriesReqService.getCategoriesWithExpenses()
+  )
 }

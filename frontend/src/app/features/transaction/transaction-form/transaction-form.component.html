@@ -1,110 +1,78 @@
+@if(isLoading()) {
+<app-spinner [isFullscreen]="true" />
+}
+
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="mat-typography">
-  <form [formGroup]="form">
-    <div class="mb-3">
-      <label for="title" class="form-label x-small text-muted mb-1"
-        >Title</label
+  <mat-form-field appearance="outline">
+    <mat-label>Title</mat-label>
+    <input matInput [formControl]="form.controls.name" />
+    @if (form.get('name')?.invalid && form.get('name')?.touched) {
+    <mat-error>Title is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" [formControl]="form.controls.date" />
+    @if (form.get('date')?.invalid && form.get('date')?.touched) {
+    <mat-error>Date is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Account</mat-label>
+    <mat-select [formControl]="form.controls.accountId">
+      <mat-option value="">Select an account</mat-option>
+      @for (account of accountsList(); track account.id) {
+      <mat-option [value]="account.id">
+        {{ account.name + ' - ' + account.currency }}
+      </mat-option>
+      }
+    </mat-select>
+    @if (form.get('accountId')?.invalid && form.get('accountId')?.touched) {
+    <mat-error>Account is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select [formControl]="form.controls.categoryId">
+      <mat-option value="">Select a category</mat-option>
+      @for (category of categoriesList(); track category.id) {
+      <mat-option [value]="category.id">{{ category.name }}</mat-option>
+      }
+    </mat-select>
+    @if (form.get('categoryId')?.invalid && form.get('categoryId')?.touched) {
+    <mat-error>Category is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [formControl]="form.controls.amount" />
+    @if (form.get('amount')?.invalid && form.get('amount')?.touched) {
+    <mat-error>Amount is required and must be a number</mat-error>
+    }
+  </mat-form-field>
+
+  <div>
+    <label class="mat-label">Type</label>
+    <mat-radio-group [formControl]="form.controls.type">
+      <mat-radio-button [value]="transactionType.Income"
+        >Income</mat-radio-button
       >
-      <input
-        type="text"
-        id="title"
-        class="form-control"
-        formControlName="title"
-      />
-      @if (form.get('title')?.invalid && form.get('title')?.touched) {
-      <div class="text-danger x-small fw-bold">Title is required</div>
-      }
-    </div>
-
-    <div class="mb-3">
-      <label for="date" class="form-label x-small text-muted mb-1">Date</label>
-      <input
-        type="date"
-        id="date"
-        class="form-control"
-        formControlName="date"
-      />
-      @if (form.get('date')?.invalid && form.get('date')?.touched) {
-      <div class="text-danger x-small fw-bold">Date is required</div>
-      }
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label x-small text-muted mb-1">Type</label>
-      <div class="form-check">
-        <input
-          type="radio"
-          id="income"
-          formControlName="type"
-          class="form-check-input"
-          [value]="transactionType.Income"
-        />
-        <label for="income" class="form-check-label">Income</label>
-      </div>
-      <div class="form-check">
-        <input
-          type="radio"
-          id="expense"
-          formControlName="type"
-          class="form-check-input"
-          [value]="transactionType.Expense"
-        />
-        <label for="expense" class="form-check-label">Expense</label>
-      </div>
-      @if (form.get('type')?.invalid && form.get('type')?.touched) {
-      <div class="text-danger x-small fw-bold">Type is required</div>
-      }
-    </div>
-
-    <div class="mb-3">
-      <label for="category" class="form-label x-small text-muted mb-1"
-        >Account</label
+      <mat-radio-button [value]="transactionType.Expense"
+        >Expense</mat-radio-button
       >
-      <select id="category" class="form-select" formControlName="accountId">
-        <option value="">Select an account</option>
-        @for (account of accountsList(); track account.id) {
-        <option [value]="account.id">{{ account.name + ' - ' + account.currency }}</option>
-        }
-      </select>
-      @if (form.get('accountId')?.invalid && form.get('accountId')?.touched) {
-      <div class="text-danger x-small fw-bold">Account is required</div>
-      }
-    </div>
-
-    <div class="mb-3">
-      <label for="category" class="form-label x-small text-muted mb-1"
-        >Category</label
-      >
-      <select id="category" class="form-select" formControlName="categoryId">
-        <option value="">Select a category</option>
-        @for (category of categories; track category.id) {
-        <option [value]="category.id">{{ category.label }}</option>
-        }
-      </select>
-      @if (form.get('categoryId')?.invalid && form.get('categoryId')?.touched) {
-      <div class="text-danger x-small fw-bold">Category is required</div>
-      }
-    </div>
-
-    <div class="mb-3">
-      <label for="amount" class="form-label x-small text-muted mb-1"
-        >Amount</label
-      >
-      <input
-        type="number"
-        id="amount"
-        class="form-control"
-        formControlName="amount"
-      />
-      @if (form.get('amount')?.invalid && form.get('amount')?.touched) {
-      <div class="text-danger x-small fw-bold">
-        Amount is required and must be a number
-      </div>
-      }
-    </div>
-  </form>
+    </mat-radio-group>
+    @if (form.get('type')?.invalid && form.get('type')?.touched) {
+    <mat-error>Type is required</mat-error>
+    }
+  </div>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close="cancel">Anuluj</button>
-  <button mat-button (click)="onSave()" mat-dialog-close="save">Zapisz</button>
+  <button mat-button mat-dialog-close="cancel">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()">Save</button>
 </mat-dialog-actions>

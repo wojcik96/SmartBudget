@@ -21,7 +21,6 @@ export class AuthService {
 
   public tokenChanged = new BehaviorSubject<void>(undefined)
 
-  // TODO: do przerobienia aby uzyskać wylogowywanie z apki. Aktualnie nie wylogowywuje się.
   public setToken(token: string | null): void {
     if (token) {
       const user = jwtDecode<any>(token)

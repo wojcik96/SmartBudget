@@ -14,5 +14,5 @@ export interface ColumnConfig {
 export interface TableConfig {
   columns: ColumnConfig[]
   data: { [key: string]: any }[]
-  showDropdownMenu: boolean
+  showDropdownMenu?: boolean
 }

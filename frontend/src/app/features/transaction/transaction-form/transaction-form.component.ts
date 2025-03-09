@@ -1,57 +1,112 @@
-import { Component, DestroyRef, inject } from '@angular/core'
+import { Component, DestroyRef, inject, signal } from '@angular/core'
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop'
-import { map, filter } from 'rxjs'
-
-import { CategoryService } from '../category-list/category.service'
-import { Category } from '../category-list/model/category.model'
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
+import { MatRadioModule } from '@angular/material/radio'
+import { MatSelectModule } from '@angular/material/select'
+import { DialogRef } from '@angular/cdk/dialog'
+import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component'
 import { TransactionFormModel } from '../models/transaction-form.model'
-import { TransactionType } from '../../../shared/defs/transactions'
-import { TransactionService } from '../services/transaction.service'
-import { AccountsService } from '../../accounts/services/accounts.service'
-import { AccountDetails, AccountType } from '../../../shared/defs/accounts'
-import { adjustAmountBasedOnType } from '../../../shared/utils/numbers'
+import {
+  TransactionDialogData,
+  TransactionFormDto,
+  TransactionType,
+} from '../../../shared/defs/transactions'
+import { AppDataService } from '../../../shared/services/app-data.service'
+import { ToastService } from '../../../shared/services/toast.service'
+import { TransactionRequestService } from '../services/transaction-request.service'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { catchError, EMPTY, tap } from 'rxjs'
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.scss',
-  imports: [ReactiveFormsModule, MatDialogModule, MatButtonModule],
+  imports: [
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatInputModule,
+    SpinnerComponent,
+  ],
 })
 export class TransactionFormComponent {
   private destroyRef = inject(DestroyRef)
-  private transactionService = inject(TransactionService)
-  private accountsService = inject(AccountsService)
-  private categoryService = inject(CategoryService)
+  private dialogRef = inject(DialogRef)
   private formBuilder = inject(FormBuilder)
+  private appDataService = inject(AppDataService)
+  private transactionReqService = inject(TransactionRequestService)
+  private toastService = inject(ToastService)
 
-  protected accountsList = toSignal(this.accountsService.accounts$)
+  protected transactionList = this.appDataService.transactionsList
+  protected accountsList = this.appDataService.accountsList
+  protected categoriesList = this.appDataService.categoriesList
+  protected isLoading = signal(false)
+  protected transactionType = TransactionType
   protected form = TransactionFormModel.getForm(this.formBuilder)
-  protected data = inject<{
-    type: 'todo'
-    elementId: string
-    title: string
-  }>(MAT_DIALOG_DATA)
-
-  categories!: Category[]
-  transactionType = TransactionType
+  protected data = inject<TransactionDialogData>(MAT_DIALOG_DATA)
 
   ngOnInit() {
-    this.getAllCategories()
-    this.getTransactionData()
+    this.getDetails()
   }
 
-  private saveForm(data: any): void {
-    const transactionDetails = {
-      id: this.data.elementId,
-      accountName: this.accountsService.getAccountLabelById(data.accountId),
-      ...data,
-    }
+  private saveForm(data: TransactionFormDto): void {
+    this.isLoading.set(true)
+    this.transactionReqService
+      .saveTransaction(data)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError(() => {
+          this.openErrorToast()
+          return EMPTY
+        }),
+        tap(() => {
+          this.isLoading.set(false)
+          this.openSuccessToast()
+        })
+      )
+      .subscribe((transactionList) => {
+        this.appDataService.transactionsListUpdate(transactionList)
+        this.dialogRef.close()
+      })
+  }
 
-    this.transactionService.saveDetails(transactionDetails)
+  private getDetails(): void {
+    const selectedTransaction = this.transactionList()?.find(
+      (transaction) => transaction.id === this.data.elementId
+    )
+
+    if (!selectedTransaction) return
+
+    this.form.patchValue({ ...selectedTransaction })
+  }
+
+  private openSuccessToast(): void {
+    this.toastService.openSuccessToast(
+      'You have successfully saved the transaction!',
+      'success',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
+  }
+
+  private openErrorToast(): void {
+    this.toastService.openSuccessToast(
+      'Something went wrong. The transaction could not be saved.',
+      'error',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
   }
 
   public onSave(): void {
@@ -61,38 +116,5 @@ export class TransactionFormComponent {
     }
 
     this.saveForm(this.form.getRawValue())
-  }
-
-  private getTransactionData(): void {
-    if (!this.data.elementId) {
-      return
-    }
-
-    this.transactionService.transaction$
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((transactions) =>
-          transactions.filter(
-            (transaction) => transaction.id === this.data.elementId
-          )
-        ),
-        filter((data) => data.length > 0)
-      )
-      .subscribe((data) => {
-        const { amount, categoryId, accountId, date, title, type } = data[0]
-
-        this.form.patchValue({
-          amount,
-          categoryId,
-          accountId,
-          date,
-          title,
-          type,
-        })
-      })
-  }
-
-  private getAllCategories() {
-    this.categories = this.categoryService.getAvailableCategories()
   }
 }

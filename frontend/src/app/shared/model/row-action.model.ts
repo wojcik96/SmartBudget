@@ -4,6 +4,6 @@ export enum RowActionType {
   }  
 
 export interface RowAction {
-    rowId: string,
+    id: string,
     type: RowActionType
 }

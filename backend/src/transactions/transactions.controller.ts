@@ -7,15 +7,11 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
-import { TransactionFormData } from './models/transaction.model';
 import { Transaction } from './entities/transactions.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { JwtUser } from 'src/auth/models/jwt-user';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Controller('transactions')
@@ -23,27 +19,27 @@ export class TransactionsController {
   constructor(private transactionsService: TransactionsService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('createTransaction')
+  @Post('create')
   async createTransaction(
-    @Body() createTransactionDto: CreateTransactionDto | UpdateTransactionDto,
+    @Body() createTransactionDto: CreateTransactionDto,
     @Req() request: Request,
   ) {
-    const user = request['user'];
-    if (!user) {
-      throw new UnauthorizedException('No user found');
-    }
+    return this.transactionsService.createTransaction(
+      createTransactionDto,
+      request['user'],
+    );
+  }
 
-    if ((createTransactionDto as UpdateTransactionDto).id) {
-      return this.transactionsService.updateTransaction(
-        createTransactionDto as UpdateTransactionDto,
-        user,
-      );
-    } else {
-      return this.transactionsService.createTransaction(
-        createTransactionDto as CreateTransactionDto,
-        user,
-      );
-    }
+  @HttpCode(HttpStatus.OK)
+  @Post('update')
+  async updateTransaction(
+    @Body() updateTransactionDto: UpdateTransactionDto,
+    @Req() request: Request,
+  ) {
+    return this.transactionsService.updateTransaction(
+      updateTransactionDto,
+      request['user'],
+    );
   }
 
   @HttpCode(HttpStatus.OK)
@@ -51,8 +47,7 @@ export class TransactionsController {
   public async getAllTransactions(
     @Req() request: Request,
   ): Promise<Transaction[]> {
-    const user = request['user'];
-    return await this.transactionsService.getAllTransactions(user);
+    return await this.transactionsService.getAllTransactions(request['user']);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -61,10 +56,8 @@ export class TransactionsController {
     @Param('transactionId') id: string,
     @Req() request: Request,
   ): Promise<Transaction[]> {
-    const user = request['user'];
-
     await this.transactionsService.removeTransaction(id);
 
-    return this.transactionsService.getAllTransactions(user);
+    return this.transactionsService.getAllTransactions(request['user']);
   }
 }

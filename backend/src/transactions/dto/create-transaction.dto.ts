@@ -7,25 +7,16 @@ export class CreateTransactionDto {
 
   @IsNumber()
   amount: number;
+  
+  @IsDate()
+  date: string;
+  
+  @IsEnum(TransactionType)
+  type: TransactionType;
 
   @IsString()
   accountId: string;
 
   @IsString()
-  accountName: string;
-
-  @IsDate()
-  date: string;
-
-  @IsString()
-  categoryLabel: string;
-
-  @IsString()
   categoryId: string;
-
-  @IsEnum(TransactionType)
-  type: TransactionType;
-
-  @IsString()
-  userId: string;
 }

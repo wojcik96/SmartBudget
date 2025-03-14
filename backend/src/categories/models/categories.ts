@@ -1,3 +1,8 @@
+export enum CategoryType {
+  INCOME = 'income',
+  EXPENSE = 'expense',
+}
+
 export enum Categories {
   'cat-1' = 'Income',
   'cat-2' = 'Shopping',

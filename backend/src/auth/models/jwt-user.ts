@@ -1,5 +1,5 @@
 export interface JwtUser {
-  sub: number;
+  sub: string;
   name: string;
   iat: number;
   exp: number;

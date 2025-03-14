@@ -4,20 +4,10 @@
     <div class="col-12">
       <div appWrapper>
         <div class="row mb-4">
-          <app-account-section
-            [config]="accountsTableConfig"
-            [accountType]="accountType.Bank"
-            title="Bank Account (API)"
-            modalText="Add Bank Account"
-          />
+          <app-account-section />
         </div>
         <div class="row">
-          <app-account-section
-            [config]="walletsTableConfig"
-            [accountType]="accountType.Wallet"
-            title="Wallets"
-            modalText="Add Wallet"
-          />
+          <app-wallet-section />
         </div>
       </div>
     </div>

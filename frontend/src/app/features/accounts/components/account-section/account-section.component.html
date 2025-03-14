@@ -1,11 +1,47 @@
 <div>
-  <p class="h4 p-0">{{ title }}</p>
-  <button class="btn btn-outline-secondary btn-sm w-auto" (click)="openNewElementDialog()">
-    <i class="bi bi-plus-circle-dotted p-1"></i> {{ modalText }}
-  </button>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="h4 p-0 m-0">Bank Account (API)</p>
+    <button mat-button class="btn-sm" (click)="openAccountDialog()">
+      <i class="bi bi-plus-circle-dotted p-1"></i> Add Bank Account
+    </button>
+  </div>
 
-  <app-data-table
-    [tableConfig]="config"
-    (selectedRow)="handleRowAction($event)"
-  ></app-data-table>
+  @if(accountList().length) {
+  <table mat-table [dataSource]="accountList()" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+    <!-- <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <span class="badge rounded-pill p-2" [class]="element.status.type">
+          {{ element.status.label }}
+        </span>
+      </td>
+    </ng-container> -->
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Creation date</th>
+      <td mat-cell *matCellDef="let element">{{ element.createdAt | date:'dd-MM-yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="balance">
+      <th mat-header-cell *matHeaderCellDef>Balance</th>
+      <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+    </ng-container>
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef>Options</th>
+      <td mat-cell *matCellDef="let element">
+        <app-row-options
+          [id]="element.id"
+          (rowAction)="handleRowAction($event)"
+        ></app-row-options>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  } @else {
+  <app-no-data message="The list is empty." />
+  }
 </div>

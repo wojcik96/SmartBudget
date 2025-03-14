@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-import { DataTableComponent } from '../../../shared/components/data-table/data-table.component';
 import { ColumnType, TableConfig } from '../../../shared/model/table-config.model';
 import { Subscription } from 'rxjs';
 import { AccountType } from '../../../shared/defs/accounts';
@@ -11,9 +10,6 @@ import { AccountsService } from '../../accounts/services/accounts.service';
   standalone: true,
   templateUrl: './accounts-list.component.html',
   styleUrl: './accounts-list.component.scss',
-  imports: [
-    DataTableComponent,
-  ],
 })
 export class AccountsListComponent {
   private accountsSubscription!: Subscription;
@@ -33,29 +29,29 @@ export class AccountsListComponent {
     { label: 'Cash Amount', key: 'balance', cssClass: 'col text-end', type: ColumnType.CURRENCY },
   ];
 
-  ngOnInit() {
-    this.accountsSubscription = this.accountsService.accounts$.subscribe(
-      (accounts) => {
-        this.accountsTableConfig = {
-          columns: this.accountTableColumns,
-          data: accounts.filter(
-            (account) => account.accountType === AccountType.Bank
-          ),
-          showDropdownMenu: false,
-        };
+  // ngOnInit() {
+  //   this.accountsSubscription = this.accountsService.accounts$.subscribe(
+  //     (accounts) => {
+  //       this.accountsTableConfig = {
+  //         columns: this.accountTableColumns,
+  //         data: accounts.filter(
+  //           (account) => account.accountType === AccountType.Bank
+  //         ),
+  //         showDropdownMenu: false,
+  //       };
 
-        this.walletsTableConfig = {
-          columns: this.walletsTableColumns,
-          data: accounts.filter(
-            (account) => account.accountType === AccountType.Wallet
-          ),
-          showDropdownMenu: false,
-        };
-      }
-    );
-  }
+  //       this.walletsTableConfig = {
+  //         columns: this.walletsTableColumns,
+  //         data: accounts.filter(
+  //           (account) => account.accountType === AccountType.Wallet
+  //         ),
+  //         showDropdownMenu: false,
+  //       };
+  //     }
+  //   );
+  // }
 
-  ngOnDestroy() {
-    this.accountsSubscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.accountsSubscription.unsubscribe();
+  // }
 }

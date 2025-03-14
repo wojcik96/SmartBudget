@@ -9,25 +9,33 @@ export enum AccountType {
 }
 
 export type AccountsForm = FormGroup<{
-  name: FormControl<string | null>
-  currency: FormControl<Currency | null>
-  amount: FormControl<number | null>
+  name: FormControl<string>
+  currency: FormControl<Currency>
+  balance: FormControl<number>
+  isMainAccount: FormControl<boolean>
 }>
 
 export interface AccountsFormData {
   id?: string
   name: string
-  amount: number
+  balance: number
   currency: string
+  isMainAccount: boolean
 }
 
 export interface AccountDetails {
   id: string
-  accountType: AccountType
+  type: AccountType
   name: string
   balance: number
   currency: string
   createDate: string
   status?: StatusType
   lastImportDate?: string
+}
+
+export interface AccountDialogData {
+  id?: string
+  title: string
+  type: AccountType
 }

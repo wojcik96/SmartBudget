@@ -1,15 +1,27 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core'
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { filter, map } from 'rxjs'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
+import { catchError, EMPTY, tap } from 'rxjs'
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
 import { MatSelectModule } from '@angular/material/select'
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { AccountsFormModel } from '../../models/accounts-form.model'
-import { AccountType, Currency } from '../../../../shared/defs/accounts'
-import { AccountsService } from '../../services/accounts.service'
+import { AccountDialogData, Currency } from '../../../../shared/defs/accounts'
+import { AppDataService } from '../../../../shared/services/app-data.service'
+import { AccountsRequestService } from '../../services/accounts-request.service'
+import { ToastService } from '../../../../shared/services/toast.service'
+import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
+import { DialogRef } from '@angular/cdk/dialog'
 
 @Component({
   selector: 'app-accounts-form',
@@ -23,55 +35,87 @@ import { AccountsService } from '../../services/accounts.service'
     MatFormFieldModule,
     MatDialogModule,
     MatButtonModule,
+    MatCheckboxModule,
+    SpinnerComponent,
   ],
 })
-export class AccountsFormComponent implements OnInit {
+export class AccountsFormComponent {
   private destroyRef = inject(DestroyRef)
-  private accountsService = inject(AccountsService)
-  private formBuilder = inject(FormBuilder)
+  private dialogRef = inject(DialogRef)
+  private formBuilder = inject(NonNullableFormBuilder)
+  private appDataService = inject(AppDataService)
+  private accountsReqService = inject(AccountsRequestService)
+  private toastService = inject(ToastService)
 
   protected form = AccountsFormModel.getForm(this.formBuilder)
-  protected data = inject<{
-    type: AccountType
-    productId: string
-    title: string
-  }>(MAT_DIALOG_DATA)
+  protected accountList = this.appDataService.accountsList
+  protected isLoading = signal(false)
+  protected data = inject<AccountDialogData>(MAT_DIALOG_DATA)
+  protected selectedAccount = computed(() =>
+    this.accountList()?.find((account) => account.id === this.data.id)
+  )
 
-  ngOnInit(): void {
-    this.getAccountData()
+  constructor() {
+    effect(() => {
+      const selectedAccount = this.selectedAccount()
+
+      if (selectedAccount) {
+        this.form.patchValue({
+          ...selectedAccount,
+          currency: selectedAccount.currency as Currency,
+        })
+      }
+    })
   }
 
   private saveForm(data: any): void {
+    this.isLoading.set(true)
+
     const accountDetails = {
-      id: this.data.productId,
+      type: this.data.type,
+      ...this.selectedAccount(),
       ...data,
     }
 
-    this.accountsService.saveDetails(this.data.type, accountDetails)
-  }
-
-  private getAccountData(): void {
-    if (!this.data.productId) {
-      return
-    }
-
-    this.accountsService.accounts$
+    this.accountsReqService
+      .create(accountDetails)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        map((accounts) =>
-          accounts.filter((account) => account.id === this.data.productId)
-        ),
-        filter((data) => data.length > 0)
-      )
-      .subscribe((data) => {
-        const { balance, currency, name } = data[0]
-
-        this.form.patchValue({
-          amount: balance,
-          currency: currency as Currency,
-          name: name,
+        catchError((error) => {
+          this.openErrorToast()
+          return EMPTY
+        }),
+        tap(() => {
+          this.isLoading.set(false)
+          this.openSuccessToast()
         })
+      )
+      .subscribe((accountList) => {
+        this.appDataService.accountsListUpdate(accountList)
+        this.dialogRef.close()
       })
+  }
+
+  private openSuccessToast(): void {
+    this.toastService.openSuccessToast(
+      'You have successfully saved the account!',
+      'success',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
+  }
+
+  private openErrorToast(): void {
+    this.toastService.openSuccessToast(
+      'Something went wrong. The account could not be saved.',
+      'error',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
   }
 
   public onSave(): void {

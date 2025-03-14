@@ -10,9 +10,10 @@ import { DialogRef } from '@angular/cdk/dialog'
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component'
 import { TransactionFormModel } from '../models/transaction-form.model'
 import {
+  CreateTransactionDto,
   TransactionDialogData,
-  TransactionFormDto,
   TransactionType,
+  UpdateTransactionDto,
 } from '../../../shared/defs/transactions'
 import { AppDataService } from '../../../shared/services/app-data.service'
 import { ToastService } from '../../../shared/services/toast.service'
@@ -56,10 +57,18 @@ export class TransactionFormComponent {
     this.getDetails()
   }
 
-  private saveForm(data: TransactionFormDto): void {
-    this.isLoading.set(true)
+  private createTransaction(data: CreateTransactionDto) {
+    const createData: CreateTransactionDto = {
+      name: data.name,
+      date: data.date,
+      type: data.type,
+      accountId: data.accountId,
+      categoryId: data.categoryId,
+      amount: data.amount,
+    }
+
     this.transactionReqService
-      .saveTransaction(data)
+      .createTransaction(createData)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError(() => {
@@ -75,6 +84,45 @@ export class TransactionFormComponent {
         this.appDataService.transactionsListUpdate(transactionList)
         this.dialogRef.close()
       })
+  }
+
+  private updateTransaction(data: UpdateTransactionDto) {
+    const updateData: UpdateTransactionDto = {
+      id: data.id,
+      name: data.name,
+      date: data.date,
+      type: data.type,
+      accountId: data.accountId,
+      categoryId: data.categoryId,
+      amount: data.amount,
+    }
+
+    this.transactionReqService
+      .updateTransaction(updateData)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError(() => {
+          this.openErrorToast()
+          return EMPTY
+        }),
+        tap(() => {
+          this.isLoading.set(false)
+          this.openSuccessToast()
+        })
+      )
+      .subscribe((transactionList) => {
+        this.appDataService.transactionsListUpdate(transactionList)
+        this.dialogRef.close()
+      })
+  }
+
+  private saveForm(data: CreateTransactionDto | UpdateTransactionDto): void {
+    this.isLoading.set(true)
+    const formData = this.form.getRawValue()
+
+    formData.id?.length
+      ? this.updateTransaction(formData)
+      : this.createTransaction(formData)
   }
 
   private getDetails(): void {

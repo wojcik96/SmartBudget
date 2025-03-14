@@ -52,7 +52,7 @@ export class TransactionListComponent {
   protected displayedColumns = [
     'date',
     'name',
-    'accountName',
+    'accountLabel',
     'categoryLabel',
     'amount',
     'type',

@@ -3,12 +3,11 @@ import { FormGroup, FormControl } from '@angular/forms'
 export type TransactionForm = FormGroup<{
   id: FormControl<string | null>
   name: FormControl<string | null>
+  amount: FormControl<number | null>
   date: FormControl<string | null>
   type: FormControl<TransactionType | null>
   accountId: FormControl<string | null>
-  accountName: FormControl<string | null>
   categoryId: FormControl<string | null>
-  amount: FormControl<number | null>
 }>
 
 export enum TransactionType {
@@ -41,15 +40,23 @@ export interface TransactionFormData {
   type: TransactionType
 }
 
-export interface TransactionFormDto {
+export interface UpdateTransactionDto {
   id: string | null
   name: string | null
+  amount: number | null
   date: string | null
   type: TransactionType | null
   accountId: string | null
-  accountName: string | null
   categoryId: string | null
+}
+
+export interface CreateTransactionDto {
+  name: string | null
   amount: number | null
+  date: string | null
+  type: TransactionType | null
+  accountId: string | null
+  categoryId: string | null
 }
 
 export interface TransactionDialogData {

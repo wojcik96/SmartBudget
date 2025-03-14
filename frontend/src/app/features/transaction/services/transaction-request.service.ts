@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
 import { catchError, Observable, throwError, timeout } from 'rxjs'
-import { Transaction, TransactionFormDto } from '../../../shared/defs/transactions'
+import { CreateTransactionDto, Transaction, UpdateTransactionDto } from '../../../shared/defs/transactions'
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +15,16 @@ export class TransactionRequestService {
     )
   }
 
-  public saveTransaction(data: TransactionFormDto): Observable<Transaction[]> {
+  public createTransaction(data: CreateTransactionDto): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(
-      'http://localhost:3000/transactions/createTransaction',
+      'http://localhost:3000/transactions/create',
+      data,
+    )
+  }
+
+  public updateTransaction(data: UpdateTransactionDto): Observable<Transaction[]> {
+    return this.http.post<Transaction[]>(
+      'http://localhost:3000/transactions/update',
       data,
     )
   }

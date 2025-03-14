@@ -8,7 +8,6 @@ export class TransactionFormModel {
   static getForm(formBuilder: FormBuilder): TransactionForm {
     return formBuilder.group({
       id: [''],
-      accountName: [''],
       name: ['', Validators.required],
       date: ['', Validators.required],
       type: ['income' as TransactionType, Validators.required],

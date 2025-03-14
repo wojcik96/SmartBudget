@@ -74,7 +74,7 @@ export class AppDataService {
   private accountsList$ = this.accountsRequestUpdate
     .pipe(
       filter(() => !!this.user()),
-      switchMap(() => this.accountsReqService.getAllAccounts()),
+      switchMap(() => this.accountsReqService.getAll()),
       tap((accounts) => {
         this.accountsUpdate.next(accounts)
       }),
@@ -102,7 +102,7 @@ export class AppDataService {
   private budgetList$ = this.budgetRequestUpdate
     .pipe(
       filter(() => !!this.user()),
-      switchMap(() => this.budgetReqService.getAllBudget()),
+      switchMap(() => this.budgetReqService.getAll()),
       tap((budget) => {
         this.budgetUpdate.next(budget)
       }),

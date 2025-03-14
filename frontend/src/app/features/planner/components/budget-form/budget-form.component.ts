@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core'
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { CategoryService } from '../../../transaction/category-list/category.service'
 import { MatButtonModule } from '@angular/material/button'
@@ -6,33 +6,48 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { MatSelectModule } from '@angular/material/select'
-import { PlannerService } from '../../services/planner.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { map, filter } from 'rxjs'
-import { Currency } from '../../../../shared/defs/accounts'
+import { catchError, EMPTY, tap } from 'rxjs'
 import { BudgetFormModel } from '../../models/budget-form.model'
+import { BudgetRequestService } from '../../services/budget-request.service'
+import { AppDataService } from '../../../../shared/services/app-data.service'
+import { ToastService } from '../../../../shared/services/toast.service'
+import { DialogRef } from '@angular/cdk/dialog'
+import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { provideNativeDateAdapter } from '@angular/material/core'
 
 @Component({
   selector: 'app-budget-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatSelectModule,
-    MatInputModule,
-    MatFormFieldModule,
     MatDialogModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    SpinnerComponent,
+    MatDatepickerModule
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './budget-form.component.html',
   styleUrl: './budget-form.component.scss',
 })
 export class BudgetFormComponent {
   private destroyRef = inject(DestroyRef)
-  private plannerService = inject(PlannerService)
-  private formBuilder = inject(FormBuilder)
-  private categoryService = inject(CategoryService)
+  private dialogRef = inject(DialogRef)
+  private budgetReqService = inject(BudgetRequestService)
+  private appDataService = inject(AppDataService)
+  private toastService = inject(ToastService)
 
-  protected categories: any[] = []
+  private categoryService = inject(CategoryService)
+  private formBuilder = inject(FormBuilder)
+
+  protected budgetList = this.appDataService.budgetList
+  protected categoriesList = this.appDataService.categoriesList
+  protected accountsList = this.appDataService.accountsList
+  protected isLoading = signal(false)
   protected form = BudgetFormModel.getForm(this.formBuilder)
   protected data = inject<{
     elementId: string
@@ -40,44 +55,65 @@ export class BudgetFormComponent {
   }>(MAT_DIALOG_DATA)
 
   ngOnInit() {
-    this.categories = this.categoryService.getAvailableCategories()
-    this.getBudgetData();
+    this.getDetails()
   }
 
   private saveForm(data: any): void {
+    this.isLoading.set(true)
+
     const budgetDetails = {
       id: this.data.elementId,
       ...data,
     }
 
-    this.plannerService.saveDetails(budgetDetails)
-  }
-
-  private getBudgetData(): void {
-
-    console.log(this.data.elementId);
-    
-    if (!this.data.elementId) {
-      return
-    }
-
-    this.plannerService.budgetsSummary$
+    this.budgetReqService
+      .create(budgetDetails)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        map((budgets) =>
-          budgets.filter((budget) => budget.id === this.data.elementId)
-        ),
-        filter((data) => data.length > 0)
-      )
-      .subscribe((data) => {
-        const { categoryId, currency, plannedAmount } = data[0]
-
-        this.form.patchValue({
-          categoryId,
-          currency,
-          plannedAmount,
+        catchError((error) => {
+          this.openErrorToast()
+          return EMPTY
+        }),
+        tap(() => {
+          this.isLoading.set(true)
+          this.openSuccessToast()
         })
+      )
+      .subscribe((budgetList) => {
+        this.appDataService.budgetListUpdate(budgetList)
       })
+  }
+
+  private getDetails(): void {
+    const selectedBudget = this.budgetList()?.find(
+      (budget) => budget.id === this.data.elementId
+    )
+
+    if (!selectedBudget) return
+
+    this.form.patchValue({ ...selectedBudget })
+  }
+
+  private openSuccessToast(): void {
+    this.toastService.openSuccessToast(
+      'You have successfully saved the transaction!',
+      'success',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
+  }
+
+  private openErrorToast(): void {
+    this.toastService.openSuccessToast(
+      'Something went wrong. The transaction could not be saved.',
+      'error',
+      {
+        horizontalPosition: 'right',
+        duration: 3000,
+      }
+    )
   }
 
   public onSave(): void {

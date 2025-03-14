@@ -2,8 +2,8 @@ import { FormGroup, FormControl } from '@angular/forms'
 import { StatusType } from '../model/status-type.model'
 
 export type BudgetForm = FormGroup<{
-  currency: FormControl<string | null>
   categoryId: FormControl<string | null>
+  plannedDate: FormControl<string | null>
   plannedAmount: FormControl<number | null>
 }>
 

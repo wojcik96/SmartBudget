@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core'
+import { Component, computed, inject, Signal } from '@angular/core'
 
 import { BudgetItemComponent } from './budget-item/budget-item.component'
-import { PlannerService } from '../../planner/services/planner.service'
 import { BudgetBarItem } from '../../../shared/defs/budgets'
-import { TransactionService } from '../../transaction/services/transaction.service'
+import { AppDataService } from '../../../shared/services/app-data.service'
+import { CategoryService } from '../../transaction/category-list/category.service'
 
 @Component({
   selector: 'app-budgets',
@@ -13,29 +13,23 @@ import { TransactionService } from '../../transaction/services/transaction.servi
   imports: [BudgetItemComponent],
 })
 export class BudgetsComponent {
-  private plannerService = inject(PlannerService)
-  private transactionService = inject(TransactionService)
+  private appDataService = inject(AppDataService)
+  private transactionService = inject(CategoryService)
 
-  public budgets: BudgetBarItem[] = []
-
-  ngOnInit() {
-    this.plannerService.budgetsSummary$.subscribe((data) => {
-      data.forEach((budget) => {
-        this.budgets.push({
-          category: budget.categoryName,
-          categoryId: budget.categoryId,
-          amount: budget.plannedAmount,
-          currency: budget.currency,
-          progress: this.calculatePercentage(
-            budget.actualExpenses,
-            budget.plannedAmount
-          ),
-          progressColor: this.transactionService.getCategoryColorById(budget.categoryId),
-          spent: budget.actualExpenses,
-        })
-      })
-    })
-  }
+  protected budgetsList: Signal<BudgetBarItem[]> = computed(() =>
+    this.appDataService.budgetList().map((budget) => ({
+      category: budget.categoryName,
+      categoryId: budget.categoryId,
+      amount: budget.plannedAmount,
+      currency: budget.currency,
+      progress: this.calculatePercentage(
+        budget.actualExpenses,
+        budget.plannedAmount
+      ),
+      progressColor: '#000',
+      spent: budget.actualExpenses,
+    }))
+  )
 
   calculatePercentage(actualExpenses: number, plannedAmount: number) {
     return (Math.abs(actualExpenses) / Math.abs(plannedAmount)) * 100

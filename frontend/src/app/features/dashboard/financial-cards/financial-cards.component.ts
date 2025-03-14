@@ -22,7 +22,7 @@ export class FinancialCardsComponent {
     {
       icon: 'bi-wallet',
       title: 'Account and Wallet Balance',
-      value: this.accountsService.getAllBalance(),
+      value: this.accountsService.allBalance(),
       currency: 'PLN',
     },
     {

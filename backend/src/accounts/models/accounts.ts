@@ -1,8 +1,8 @@
 export type Currency = 'EUR' | 'PLN' | 'USD';
 
 export enum AccountType {
-  Bank = 'bank',
-  Wallet = 'wallet',
+  BANK = 'bank',
+  WALLET = 'wallet',
 }
 
 export interface AccountDetails {
@@ -20,6 +20,7 @@ export enum StatusOption {
   SUCCESS = 'bg-success',
   ERROR = 'bg-danger',
   WARNING = 'bg-warning',
+  PERFECT = 'bg-perfect'
 }
 
 export interface StatusType {

@@ -3,34 +3,51 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
-import { Budget, BudgetFormData } from './models/budgets';
 import { BudgetsService } from './budgets.service';
+import { CreateBudgetDto } from './dto/create-budget.dto';
 
 @Controller('budgets')
 export class BudgetsController {
   constructor(private budgetsService: BudgetsService) {}
 
-  @Get('getAllBudget')
-  public getAllBudgets(): Budget[] {
-    return this.budgetsService.getAllBudgets();
+  @HttpCode(HttpStatus.OK)
+  @Post('create')
+  async create(
+    @Body() createAccountDto: CreateBudgetDto,
+    @Req() request: Request,
+  ) {
+    const user = request['user'];
+    return this.budgetsService.create(createAccountDto, user);
   }
 
-  @Post('addBudget')
-  public addBudget(@Body() data: BudgetFormData): void {
-    this.budgetsService.addBudget(data);
+  @HttpCode(HttpStatus.OK)
+  @Delete('remove/:budgetId')
+  async remove(@Param('budgetId') id) {
+    this.budgetsService.remove(id);
   }
 
-  @Put('updateBudget')
-  public updateBudget(@Body() data: BudgetFormData): void {
-    this.budgetsService.updateBudget(data);
+  @HttpCode(HttpStatus.OK)
+  @Get('getAll')
+  async getAccountsList(@Req() request: Request): Promise<any[]> {
+    const user = request['user'];
+    return await this.budgetsService.getAll(user);
   }
 
-  @Delete('remove:id')
-  public removeBudget(@Param('id') id: string): void {
-    this.budgetsService.removeBudget(id);
-  }
+  // @Post('saveBudget')
+  // public addBudget(@Body() data: BudgetFormData): Budget[] {
+  //   if (!data.id) {
+  //     this.budgetsService.addBudget(data);
+  //   } else {
+  //     this.budgetsService.updateBudget(data);
+  //   }
+
+  //   return this.budgetsService.getAllBudgets();
+  // }
 }

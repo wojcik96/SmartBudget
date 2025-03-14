@@ -1,69 +1,139 @@
 import { Injectable } from '@nestjs/common';
-import { Budget, BudgetFormData } from './models/budgets';
+import { format } from 'date-fns';
 import { CategoriesService } from 'src/categories/categories.service';
-import { generateId } from 'src/utils/id-generator';
 import { StatusOption } from 'src/accounts/models/accounts';
+import { CreateBudgetDto } from './dto/create-budget.dto';
+import { JwtUser } from 'src/auth/models/jwt-user';
+import { UsersService } from 'src/users/users.service';
+import { Budget } from './entities/budget.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from 'src/categories/entities/categories.entity';
+import { Account } from 'src/accounts/entities/account.entity';
+import { Transaction } from 'src/transactions/entities/transactions.entity';
 
 @Injectable()
 export class BudgetsService {
-  private budgetsList: Budget[] = [];
+  constructor(
+    @InjectRepository(Budget)
+    private readonly budgetRepo: Repository<Budget>,
+    @InjectRepository(Category)
+    private readonly categoryRepo: Repository<Category>,
+    @InjectRepository(Account)
+    private readonly accountRepo: Repository<Account>,
+    @InjectRepository(Transaction)
+    private readonly transactionRepo: Repository<Transaction>,
+    private readonly categoryService: CategoriesService,
+    private readonly userService: UsersService,
+  ) {}
 
-  constructor(private categoryService: CategoriesService) {}
-
-  public getAllBudgets(): Budget[] {
-    return this.budgetsList;
-  }
-
-  public addBudget(data: BudgetFormData): void {
-    const actualExpenses = this.categoryService.getCategoryAmountById(
-      data.categoryId,
-    );
-    const difference = this.countDifference(data.plannedAmount, actualExpenses);
-    const newEntry: Budget = {
-      id: generateId('bud-'),
-      createDate: new Date().toLocaleDateString(),
-      categoryName: this.categoryService.getCategoryLabelById(data.categoryId),
-      categoryId: data.categoryId,
-      currency: data.currency,
-      plannedAmount: data.plannedAmount,
-      actualExpenses: actualExpenses,
-      difference: difference,
-      status: this.setStatus(difference),
-    };
-
-    this.budgetsList.push(newEntry);
-  }
-
-  public updateBudget(data: BudgetFormData): void {
-    this.budgetsList = this.budgetsList.map((budget) => {
-      if (budget.id === data.id) {
-        return {
-          ...budget,
-          categoryName: this.categoryService.getCategoryLabelById(
-            data.categoryId,
-          ),
-          categoryId: data.categoryId,
-          currency: data.currency,
-          plannedAmount: data.plannedAmount,
-        };
-      }
-      return budget;
+  async create(
+    createBudgetDto: CreateBudgetDto,
+    jwtUser: JwtUser,
+  ): Promise<void> {
+    const user = await this.userService.getUserFromJwt(jwtUser);
+    const category = await this.categoryRepo.findOne({
+      where: { id: createBudgetDto.categoryId },
     });
+
+    const budget = this.budgetRepo.create({
+      category,
+      plannedDate: createBudgetDto.plannedDate,
+      plannedAmount: createBudgetDto.plannedAmount,
+      user,
+    });
+    await this.budgetRepo.save(budget);
   }
 
-  public removeBudget(accountId: string): void {
-    this.budgetsList = this.budgetsList.filter(
-      (account) => account.id !== accountId,
+  // TODO: AddUpData method
+
+  async remove(id: string): Promise<void> {
+    await this.budgetRepo.delete(id);
+  }
+
+  // async getAll(jwtUser: JwtUser): Promise<any[]> {
+  //   const user = await this.userService.getUserFromJwt(jwtUser);
+
+  //   const budgets = await this.budgetRepo.find({
+  //     where: { user },
+  //     relations: ['category'],
+  //   });
+
+  //   return budgets.map((budget) => ({
+  //     id: budget.id,
+  //     plannedAmount: budget.plannedAmount,
+  //     plannedDate: budget.plannedDate,
+  //     categoryId: budget.category.id,
+  //     categoryName: budget.category.name,
+  //     difference: 0,
+  //     totalIncome: 0,
+  //     status: this.setStatus(0),
+  //   }));
+  // }
+
+  async getAll(jwtUser: JwtUser): Promise<any> {
+    const budgets = await this.budgetRepo.find({
+      where: { user: { id: jwtUser.sub } },
+    });
+
+    return Promise.all(
+      budgets.map(async (budget) => {
+        const date = new Date(budget.plannedDate);
+        const difference = await this.calculateBudgetDifference(budget);
+        return {
+          categoryName: budget.category.name,
+          plannedAmount: budget.plannedAmount,
+          status: this.setStatus(difference, budget.plannedAmount),
+          actualExpenses: await this.getTotalExpenseForCategory(
+            budget.category.id,
+            date.getFullYear(),
+            date.getMonth() + 1,
+          ),
+          difference,
+        };
+      }),
     );
   }
 
-  private countDifference(a: number, b: number) {
-    return Number((a + b).toFixed(2));
+  async getTotalExpenseForCategory(
+    categoryId: string,
+    year: number,
+    month: number,
+  ): Promise<number> {
+    const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
+    const endDate = `${year}-${month.toString().padStart(2, '0')}-31`;
+
+    const total = await this.transactionRepo
+      .createQueryBuilder('transaction')
+      .select('SUM(transaction.amount)', 'total')
+      .where('transaction.categoryId = :categoryId', { categoryId })
+      .andWhere('transaction.type = :type', { type: 'expense' })
+      .andWhere('transaction.date BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .getRawOne();
+
+    return Number(total?.total) || 0;
   }
 
-  private setStatus(difference: number) {
-    return difference >= 0
-      ? { type: StatusOption.SUCCESS, label: 'Below Budget' }
-      : { type: StatusOption.ERROR, label: 'Over Budget' };
+  async calculateBudgetDifference(budget: Budget): Promise<number> {
+    const date = new Date(budget.plannedDate);
+    const expense = await this.getTotalExpenseForCategory(
+      budget.category.id,
+      date.getFullYear(),
+      date.getMonth() + 1,
+    );
+
+    return Number(budget.plannedAmount) - expense;
+  }
+  private setStatus(difference: number, plannedAmount: number) {
+    if (difference >= 0) {
+      return { type: StatusOption.SUCCESS, label: 'Below Budget' };
+    } else if ((difference = plannedAmount)) {
+      return { type: StatusOption.PERFECT, label: 'Perfect!' };
+    } else {
+      return { type: StatusOption.ERROR, label: 'Over Budget' };
+    }
   }
 }

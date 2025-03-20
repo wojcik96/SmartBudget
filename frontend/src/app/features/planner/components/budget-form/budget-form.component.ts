@@ -1,6 +1,5 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core'
+import { Component, DestroyRef, inject, signal } from '@angular/core'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
-import { CategoryService } from '../../../transaction/category-list/category.service'
 import { MatButtonModule } from '@angular/material/button'
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -12,7 +11,6 @@ import { BudgetFormModel } from '../../models/budget-form.model'
 import { BudgetRequestService } from '../../services/budget-request.service'
 import { AppDataService } from '../../../../shared/services/app-data.service'
 import { ToastService } from '../../../../shared/services/toast.service'
-import { DialogRef } from '@angular/cdk/dialog'
 import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { provideNativeDateAdapter } from '@angular/material/core'
@@ -28,7 +26,7 @@ import { provideNativeDateAdapter } from '@angular/material/core'
     MatSelectModule,
     MatInputModule,
     SpinnerComponent,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './budget-form.component.html',
@@ -36,17 +34,13 @@ import { provideNativeDateAdapter } from '@angular/material/core'
 })
 export class BudgetFormComponent {
   private destroyRef = inject(DestroyRef)
-  private dialogRef = inject(DialogRef)
   private budgetReqService = inject(BudgetRequestService)
   private appDataService = inject(AppDataService)
   private toastService = inject(ToastService)
-
-  private categoryService = inject(CategoryService)
   private formBuilder = inject(FormBuilder)
 
   protected budgetList = this.appDataService.budgetList
   protected categoriesList = this.appDataService.categoriesList
-  protected accountsList = this.appDataService.accountsList
   protected isLoading = signal(false)
   protected form = BudgetFormModel.getForm(this.formBuilder)
   protected data = inject<{

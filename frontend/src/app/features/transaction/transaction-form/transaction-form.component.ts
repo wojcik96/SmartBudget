@@ -20,12 +20,15 @@ import { ToastService } from '../../../shared/services/toast.service'
 import { TransactionRequestService } from '../services/transaction-request.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { catchError, EMPTY, tap } from 'rxjs'
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { provideNativeDateAdapter } from '@angular/material/core'
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.scss',
+  providers: [provideNativeDateAdapter()],
   imports: [
     ReactiveFormsModule,
     MatDialogModule,
@@ -35,6 +38,7 @@ import { catchError, EMPTY, tap } from 'rxjs'
     MatRadioModule,
     MatInputModule,
     SpinnerComponent,
+    MatDatepickerModule,
   ],
 })
 export class TransactionFormComponent {
@@ -82,6 +86,8 @@ export class TransactionFormComponent {
       )
       .subscribe((transactionList) => {
         this.appDataService.transactionsListUpdate(transactionList)
+        this.appDataService.updateAccountsListRequest()
+        this.appDataService.updateBudgetListRequest()
         this.dialogRef.close()
       })
   }
@@ -112,6 +118,8 @@ export class TransactionFormComponent {
       )
       .subscribe((transactionList) => {
         this.appDataService.transactionsListUpdate(transactionList)
+        this.appDataService.updateAccountsListRequest()
+        this.appDataService.updateBudgetListRequest()
         this.dialogRef.close()
       })
   }

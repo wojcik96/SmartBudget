@@ -108,6 +108,8 @@ export class TransactionListComponent {
       )
       .subscribe((transactions) => {
         this.appDataService.transactionsListUpdate(transactions)
+        this.appDataService.updateAccountsListRequest()
+        this.appDataService.updateBudgetListRequest()
         this.isLoading.set(false)
       })
   }

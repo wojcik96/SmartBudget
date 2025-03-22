@@ -6,12 +6,11 @@ import { AppDataService } from '../../../shared/services/app-data.service'
 })
 export class AccountsService {
   private appDataService = inject(AppDataService)
+  private accountList = this.appDataService.accountsList
 
-  protected accountList = this.appDataService.accountsList
-
-  public readonly allBalance = computed(() => {
+  public readonly allBalance = computed(() => { //TODO: zastanowić się czy wyliczamy też z ujemnym stanem konta??
     return this.accountList().reduce((balance, account) => {
-      return balance + account.balance
+      return Number(balance) + Number(account.balance)
     }, 0)
   })
 }

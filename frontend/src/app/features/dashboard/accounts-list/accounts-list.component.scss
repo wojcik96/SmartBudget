@@ -1,0 +1,9 @@
+:host {
+  .mat-mdc-table {
+    --mat-app-elevation-shadow-level-8: none;
+
+    .mat-column-balance {
+      text-align: right;
+    }
+  }
+}

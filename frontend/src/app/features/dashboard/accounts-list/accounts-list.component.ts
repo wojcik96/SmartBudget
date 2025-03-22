@@ -1,57 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core'
 
-import { ColumnType, TableConfig } from '../../../shared/model/table-config.model';
-import { Subscription } from 'rxjs';
-import { AccountType } from '../../../shared/defs/accounts';
-import { AccountsService } from '../../accounts/services/accounts.service';
+import { TableConfig } from '../../../shared/model/table-config.model'
+import { AccountType } from '../../../shared/defs/accounts'
+import { AppDataService } from '../../../shared/services/app-data.service'
+import { MatTableModule } from '@angular/material/table'
+import { NoDataComponent } from '../../../shared/components/no-data/no-data.component'
 
 @Component({
   selector: 'app-accounts-list',
   standalone: true,
+  imports: [MatTableModule, NoDataComponent],
   templateUrl: './accounts-list.component.html',
   styleUrl: './accounts-list.component.scss',
 })
 export class AccountsListComponent {
-  private accountsSubscription!: Subscription;
-  accountsTableConfig!: TableConfig;
-  walletsTableConfig!: TableConfig;
-  accountType = AccountType;
+  private appDataService = inject(AppDataService)
 
-  constructor(private accountsService: AccountsService) {}
+  protected displayedColumns = ['name', 'balance']
+  protected accountList = computed(() =>
+    this.appDataService
+      .accountsList()
+      ?.filter((account) => account.type === AccountType.Bank)
+  )
 
-  private accountTableColumns = [
-    { label: 'Account Name', key: 'name', cssClass: 'col' },
-    { label: 'Balance', key: 'balance', cssClass: 'col text-end', type: ColumnType.CURRENCY },
-  ];
-
-  private walletsTableColumns = [
-    { label: 'Wallet Name', key: 'name', cssClass: 'col' },
-    { label: 'Cash Amount', key: 'balance', cssClass: 'col text-end', type: ColumnType.CURRENCY },
-  ];
-
-  // ngOnInit() {
-  //   this.accountsSubscription = this.accountsService.accounts$.subscribe(
-  //     (accounts) => {
-  //       this.accountsTableConfig = {
-  //         columns: this.accountTableColumns,
-  //         data: accounts.filter(
-  //           (account) => account.accountType === AccountType.Bank
-  //         ),
-  //         showDropdownMenu: false,
-  //       };
-
-  //       this.walletsTableConfig = {
-  //         columns: this.walletsTableColumns,
-  //         data: accounts.filter(
-  //           (account) => account.accountType === AccountType.Wallet
-  //         ),
-  //         showDropdownMenu: false,
-  //       };
-  //     }
-  //   );
-  // }
-
-  // ngOnDestroy() {
-  //   this.accountsSubscription.unsubscribe();
-  // }
+  protected walletList = computed(() =>
+    this.appDataService
+      .accountsList()
+      ?.filter((account) => account.type === AccountType.Wallet)
+  )
 }

@@ -1,0 +1,28 @@
+<p>Filters</p>
+<section>
+  <mat-form-field appearance="outline">
+    <mat-label>Account</mat-label>
+    <mat-select [(ngModel)]="selectedAccount" (selectionChange)="applyFilter()">
+      <mat-option value="">Select an account</mat-option>
+      @for (account of accountsList(); track account.id) {
+      <mat-option [value]="account.id">
+        {{ account.name + ' - ' + account.currency }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select
+      [(ngModel)]="selectedCategory"
+      (selectionChange)="applyFilter()"
+    >
+      <mat-option value="">Select an account</mat-option>
+      @for (category of categoriesList(); track category.id) {
+      <mat-option [value]="category.id">
+        {{ category.name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</section>

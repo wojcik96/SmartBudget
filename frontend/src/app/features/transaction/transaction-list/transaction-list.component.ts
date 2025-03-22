@@ -21,6 +21,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort'
 import { SpinnerComponent } from '../../../shared/components/spinner/spinner.component'
 import { ToastService } from '../../../shared/services/toast.service'
 import { MatIconModule } from '@angular/material/icon'
+import { TransactionFiltersComponent } from '../transaction-filters/transaction-filters.component'
 
 @Component({
   selector: 'app-transaction-list',
@@ -35,6 +36,7 @@ import { MatIconModule } from '@angular/material/icon'
     NoDataComponent,
     RowOptionsComponent,
     SpinnerComponent,
+    TransactionFiltersComponent,
   ],
 })
 export class TransactionListComponent {
@@ -49,6 +51,7 @@ export class TransactionListComponent {
   protected transactionType = TransactionType
   protected isLoading = signal(true)
   protected dataSource = new MatTableDataSource<Transaction>([])
+  protected filters = { accountId: '', categoryId: '' }
   protected displayedColumns = [
     'date',
     'name',
@@ -79,6 +82,15 @@ export class TransactionListComponent {
       },
       { allowSignalWrites: true }
     )
+
+    this.dataSource.filterPredicate = (transaction: Transaction, filter: string) => {
+      const { accountId, categoryId } = JSON.parse(filter)
+  
+      return (
+        (accountId === '' || transaction.accountId === accountId) &&
+        (categoryId === '' || transaction.categoryId === categoryId)
+      )
+    }
   }
 
   private openEditElementDialog(transactionId: string): void {
@@ -126,6 +138,14 @@ export class TransactionListComponent {
       'Transaction successfully deleted!',
       'success'
     )
+  }
+
+  protected applyFilters(filters: {
+    accountId: string
+    categoryId: string
+  }): void {
+    this.filters = filters
+    this.dataSource.filter = JSON.stringify(filters) // Ustawiamy filtr
   }
 
   public handleRowAction(event: RowAction) {

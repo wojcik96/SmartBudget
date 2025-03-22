@@ -1,6 +1,7 @@
 @if(isLoading()) {
 <app-spinner />
 } @else if (transactionsList().length) {
+<app-transaction-filters (filterChanged)="applyFilters($event)"></app-transaction-filters>
 <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="date">
     <th

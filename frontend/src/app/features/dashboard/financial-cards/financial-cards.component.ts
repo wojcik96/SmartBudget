@@ -17,24 +17,23 @@ export class FinancialCardsComponent {
   private accountsService = inject(AccountsService)
   private transactionService = inject(TransactionService)
   
-
   financialCards: FinancialCard[] = [
     {
       icon: 'bi-wallet',
       title: 'Account and Wallet Balance',
-      value: this.accountsService.allBalance(),
+      value: this.accountsService.allBalance,
       currency: 'PLN',
     },
     {
       icon: 'bi-graph-up-arrow',
       title: 'Income',
-      value: this.transactionService.incomeAmount(),
+      value: this.transactionService.incomeAmount,
       currency: 'PLN',
     },
     {
       icon: 'bi-graph-down-arrow',
       title: 'Expenses',
-      value: this.transactionService.expensesAmount(),
+      value: this.transactionService.expensesAmount,
       currency: 'PLN',
     },
   ]

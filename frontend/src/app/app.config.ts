@@ -6,8 +6,11 @@ import localeFr from '@angular/common/locales/fr'
 registerLocaleData(localeFr, 'fr')
 
 import { routes } from './app.routes'
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http'
+import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import { authInterceptor } from './shared/interceptors/auth-interceptor'
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts'
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter'
+import { DATE_FORMATS } from './shared/defs/date-format'
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
+    provideCharts(withDefaultRegisterables()),
+    provideMomentDateAdapter(DATE_FORMATS),
   ],
 }

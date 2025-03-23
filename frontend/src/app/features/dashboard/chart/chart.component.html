@@ -1,3 +1,51 @@
-<div class="chart-container">
-  <canvas id="chart-box">{{ chart }}</canvas>
+<div class="datepicker-container">
+  <mat-form-field class="datepicker-field" appearance="outline">
+    <mat-label>Show for Month and Year</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date" />
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker
+      #dp
+      startView="multi-year"
+      (monthSelected)="setMonthAndYear($event, dp)"
+      panelClass="example-month-picker"
+    >
+    </mat-datepicker>
+  </mat-form-field>
+</div>
+
+<div class="charts-container">
+  <div class="chart-item chart-item--pie">
+    <p class="h3 chart-item__title">Expense categories</p>
+    <canvas
+      baseChart
+      [data]="pieChartData()"
+      [options]="pieChartOptions"
+      type="pie"
+      class="chart-item__canvas"
+    >
+    </canvas>
+  </div>
+
+  <div class="chart-item chart-item--line">
+    <p class="h3 chart-item__title">Daily Expenses</p>
+    <canvas
+      baseChart
+      [data]="lineChartData()"
+      [options]="lineChartOptions"
+      [type]="'line'"
+      class="chart-item__canvas"
+    ></canvas>
+  </div>
+</div>
+
+<div class="chart-item chart-item--bar">
+  <p class="h3 chart-item__title">Expenses vs Income</p>
+  <canvas
+    baseChart
+    [data]="barChartData()"
+    [options]="barChartOptions"
+    type="bar"
+    class="chart-item__canvas"
+  >
+  </canvas>
 </div>

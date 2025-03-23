@@ -1,0 +1,22 @@
+:host {
+  .datepicker-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .charts-container {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+
+    .chart-item--pie {
+      display: flex;
+      flex-direction: column;
+      width: 35%;
+    }
+
+    .chart-item--line {
+      width: 100%;
+    }
+  }
+}

@@ -1,7 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
 import { catchError, Observable, throwError, timeout } from 'rxjs'
-import { CreateTransactionDto, Transaction, UpdateTransactionDto } from '../../../shared/defs/transactions'
+import {
+  CreateTransactionDto,
+  Transaction,
+  UpdateTransactionDto,
+} from '../../../shared/defs/transactions'
 
 @Injectable({
   providedIn: 'root',
@@ -15,17 +19,21 @@ export class TransactionRequestService {
     )
   }
 
-  public createTransaction(data: CreateTransactionDto): Observable<Transaction[]> {
+  public createTransaction(
+    data: CreateTransactionDto
+  ): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(
       'http://localhost:3000/transactions/create',
-      data,
+      data
     )
   }
 
-  public updateTransaction(data: UpdateTransactionDto): Observable<Transaction[]> {
+  public updateTransaction(
+    data: UpdateTransactionDto
+  ): Observable<Transaction[]> {
     return this.http.post<Transaction[]>(
       'http://localhost:3000/transactions/update',
-      data,
+      data
     )
   }
 
@@ -33,5 +41,15 @@ export class TransactionRequestService {
     return this.http.delete<Transaction[]>(
       `http://localhost:3000/transactions/remove/${transactionId}`
     )
+  }
+
+  public uploadTransactionImg(file: File) {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+  
+    return this.http.post(
+      'http://localhost:3000/transactions/uploadImg',
+      formData
+    );
   }
 }

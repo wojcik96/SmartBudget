@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core'
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms'
+import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -22,6 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { catchError, EMPTY, tap } from 'rxjs'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { provideNativeDateAdapter } from '@angular/material/core'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'app-transaction-form',
@@ -37,6 +38,7 @@ import { provideNativeDateAdapter } from '@angular/material/core'
     MatSelectModule,
     MatRadioModule,
     MatInputModule,
+    MatIconModule,
     SpinnerComponent,
     MatDatepickerModule,
   ],
@@ -48,6 +50,7 @@ export class TransactionFormComponent {
   private appDataService = inject(AppDataService)
   private transactionReqService = inject(TransactionRequestService)
   private toastService = inject(ToastService)
+  private fileStore!: FileList
 
   protected transactionList = this.appDataService.transactionsList
   protected accountsList = this.appDataService.accountsList
@@ -56,6 +59,8 @@ export class TransactionFormComponent {
   protected transactionType = TransactionType
   protected form = TransactionFormModel.getForm(this.formBuilder)
   protected data = inject<TransactionDialogData>(MAT_DIALOG_DATA)
+  protected fileControl = new FormControl('')
+  protected fileList: Array<string> = []
 
   ngOnInit() {
     this.getDetails()
@@ -143,6 +148,15 @@ export class TransactionFormComponent {
     this.form.patchValue({ ...selectedTransaction })
   }
 
+  private getDetailsByImg(file: File): void {
+    this.isLoading.set(true)
+
+    this.transactionReqService.uploadTransactionImg(file).subscribe((data) => {
+      this.form.patchValue(data)
+      this.isLoading.set(false)
+    })
+  }
+
   private openSuccessToast(): void {
     this.toastService.openSuccessToast(
       'You have successfully saved the transaction!',
@@ -172,5 +186,24 @@ export class TransactionFormComponent {
     }
 
     this.saveForm(this.form.getRawValue())
+  }
+
+  protected onGeneratedByImgBtnClick(): void {
+    if (!this.fileStore.length) {
+      return
+    }
+
+    this.getDetailsByImg(this.fileStore[0])
+  }
+
+  protected handleFileInputChange(list: FileList): void {
+    this.fileStore = list
+    if (list.length) {
+      const file = list[0]
+      const count = list.length > 1 ? `(+${list.length - 1} files)` : ''
+      this.fileControl.patchValue(`${file.name}${count}`)
+    } else {
+      this.fileControl.patchValue('')
+    }
   }
 }

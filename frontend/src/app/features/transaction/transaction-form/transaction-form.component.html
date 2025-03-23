@@ -13,21 +13,6 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Date</mat-label>
-    <input
-      matInput
-      [formControl]="form.controls.date"
-      [matDatepicker]="picker"
-    />
-    <mat-hint>MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-    @if (form.get('date')?.invalid && form.get('date')?.touched) {
-    <mat-error>Date is required</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
     <mat-label>Account</mat-label>
     <mat-select [formControl]="form.controls.accountId">
       <mat-option value="">Select an account</mat-option>
@@ -39,6 +24,44 @@
     </mat-select>
     @if (form.get('accountId')?.invalid && form.get('accountId')?.touched) {
     <mat-error>Account is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Bill image</mat-label>
+    <button mat-icon-button matPrefix (click)="fileInput.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+    <input type="text" readonly matInput [formControl]="fileControl" />
+    <input
+      type="file"
+      multiple
+      hidden
+      #fileInput
+      (change)="handleFileInputChange(fileInput.files!)"
+    />
+  </mat-form-field>
+  <button
+    mat-button
+    class="btn-sm"
+    type="button"
+    (click)="onGeneratedByImgBtnClick()"
+  >
+    Generate by image
+  </button>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input
+      matInput
+      [formControl]="form.controls.date"
+      [matDatepicker]="picker"
+    />
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    @if (form.get('date')?.invalid && form.get('date')?.touched) {
+    <mat-error>Date is required</mat-error>
     }
   </mat-form-field>
 

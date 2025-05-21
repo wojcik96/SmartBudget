@@ -30,7 +30,7 @@ export class BudgetsService {
   async create(
     createBudgetDto: CreateBudgetDto,
     jwtUser: JwtUser,
-  ): Promise<void> {
+  ): Promise<Budget[]> {
     const user = await this.userService.getUserFromJwt(jwtUser);
     const category = await this.categoryRepo.findOne({
       where: { id: createBudgetDto.categoryId },
@@ -43,12 +43,16 @@ export class BudgetsService {
       user,
     });
     await this.budgetRepo.save(budget);
+    
+    return this.getAll(jwtUser);
   }
 
   // TODO: AddUpData method
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, jwtUser: JwtUser): Promise<Budget[]> {
     await this.budgetRepo.delete(id);
+
+    return this.getAll(jwtUser);
   }
 
   // async getAll(jwtUser: JwtUser): Promise<any[]> {
@@ -81,6 +85,7 @@ export class BudgetsService {
         const date = new Date(budget.plannedDate);
         const difference = await this.calculateBudgetDifference(budget);
         return {
+          id: budget.id,
           categoryName: budget.category.name,
           plannedAmount: budget.plannedAmount,
           status: this.setStatus(difference, budget.plannedAmount),

@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core'
-
-import { CategoryService } from './category.service'
 import { CategoryItemComponent } from './category-item/category-item.component'
-import { CategoriesRequestService } from '../../../shared/services/categories-request.service'
-import { toSignal } from '@angular/core/rxjs-interop'
+import { AppDataService } from '../../../shared/services/app-data.service'
 
 @Component({
   selector: 'app-category-list',
@@ -13,9 +10,7 @@ import { toSignal } from '@angular/core/rxjs-interop'
   imports: [CategoryItemComponent],
 })
 export class CategoryListComponent {
-  private categoriesReqService = inject(CategoriesRequestService)
+  private appDataService = inject(AppDataService)
 
-  protected categoriesWithExpenses = toSignal(
-    this.categoriesReqService.getCategoriesWithExpenses()
-  )
+  protected categoriesWithExpenses = this.appDataService.categoriesSummaryList
 }

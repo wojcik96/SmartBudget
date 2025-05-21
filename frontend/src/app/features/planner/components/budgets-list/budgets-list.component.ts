@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core'
+import { Component, effect, inject, Input, signal } from '@angular/core'
 import {
   RowAction,
   RowActionType,
@@ -11,6 +11,8 @@ import { BudgetRequestService } from '../../services/budget-request.service'
 import { MatTableModule } from '@angular/material/table'
 import { RowOptionsComponent } from '../../../../shared/components/row-options/row-options.component'
 import { MatButtonModule } from '@angular/material/button'
+import { tap } from 'rxjs'
+import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
 
 @Component({
   selector: 'app-budgets-list',
@@ -22,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button'
     MatButtonModule,
     RowOptionsComponent,
     NoDataComponent,
+    SpinnerComponent,
   ],
 })
 export class BudgetsListComponent {
@@ -29,6 +32,7 @@ export class BudgetsListComponent {
   private appDataService = inject(AppDataService)
   private budgetReqService = inject(BudgetRequestService)
 
+  protected isLoading = signal(true)
   protected budgetList = this.appDataService.budgetList
   protected displayedColumns = [
     'categoryName',
@@ -39,13 +43,34 @@ export class BudgetsListComponent {
     'options',
   ]
 
+  constructor() {
+    effect(
+      () => {
+        if (this.budgetList().length > 0) {
+          this.isLoading.set(false)
+        }
+      },
+      { allowSignalWrites: true }
+    )
+  }
+
   private removeBudget(id: string) {
-    this.budgetReqService.remove(id).subscribe((budgetList) => {
-      this.appDataService.budgetListUpdate(budgetList)
-    })
+    this.isLoading.set(true)
+    this.budgetReqService
+      .remove(id)
+      .pipe(
+        tap(() => {
+          this.isLoading.set(false)
+        })
+      )
+      .subscribe((budgetList) => {
+        this.appDataService.budgetListUpdate(budgetList)
+      })
   }
 
   protected handleRowAction(event: RowAction) {
+    console.log(event)
+
     switch (event.type) {
       case RowActionType.Edit:
         this.openBudgetDialog(event.id)

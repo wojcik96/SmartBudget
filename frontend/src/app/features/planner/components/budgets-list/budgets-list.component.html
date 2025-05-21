@@ -6,7 +6,10 @@
     </button>
   </div>
 
-  @if (budgetList().length) {
+  @if(isLoading()) {
+    <app-spinner />
+    } 
+  @else if (budgetList().length)  {
   <table
     mat-table
     [dataSource]="budgetList()"

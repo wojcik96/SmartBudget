@@ -76,7 +76,7 @@ export class TransactionListComponent {
     effect(
       () => {
         if (this.transactionsList()) {
-          this.dataSource.data = this.transactionsList()
+          this.dataSource.data = this.transactionsList().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           this.isLoading.set(false)
         }
       },

@@ -125,6 +125,24 @@ export class AppDataService {
 
   public categoriesList = toSignal(this.categoriesList$)
 
+  private categoriesSummaryRequestUpdate = new BehaviorSubject<void>(undefined)
+
+  private categoriesSummaryList$ = this.categoriesSummaryRequestUpdate
+    .pipe(
+      filter(() => !!this.user()),
+      switchMap(() => this.categoriesReqService.getCategoriesWithExpenses()),
+      tap((budget) => {
+        this.budgetUpdate.next(budget)
+      }),
+      shareReplay(1)
+    )
+
+  public categoriesSummaryList = toSignal(this.categoriesSummaryList$)
+
+  public updateCategoriesSummaryListRequest(): void {
+    this.categoriesSummaryRequestUpdate.next()
+  }
+
   // Global Data Logic
   public getGlobalData(): void {
     this.updateTransactionsListRequest()

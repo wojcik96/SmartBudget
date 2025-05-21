@@ -22,15 +22,20 @@ export class BudgetsController {
   async create(
     @Body() createAccountDto: CreateBudgetDto,
     @Req() request: Request,
-  ) {
+  ): Promise<any[]> {
     const user = request['user'];
     return this.budgetsService.create(createAccountDto, user);
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete('remove/:budgetId')
-  async remove(@Param('budgetId') id) {
-    this.budgetsService.remove(id);
+  async remove(
+    @Param('budgetId') id,
+    @Req() request: Request
+  ): Promise<any[]> {
+    const user = request['user'];
+
+    return this.budgetsService.remove(id, user);
   }
 
   @HttpCode(HttpStatus.OK)

@@ -14,6 +14,7 @@ import { ToastService } from '../../../../shared/services/toast.service'
 import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { provideNativeDateAdapter } from '@angular/material/core'
+import { DialogRef } from '@angular/cdk/dialog'
 
 @Component({
   selector: 'app-budget-form',
@@ -34,6 +35,7 @@ import { provideNativeDateAdapter } from '@angular/material/core'
 })
 export class BudgetFormComponent {
   private destroyRef = inject(DestroyRef)
+  private dialogRef = inject(DialogRef)
   private budgetReqService = inject(BudgetRequestService)
   private appDataService = inject(AppDataService)
   private toastService = inject(ToastService)
@@ -69,12 +71,13 @@ export class BudgetFormComponent {
           return EMPTY
         }),
         tap(() => {
-          this.isLoading.set(true)
+          this.isLoading.set(false)
           this.openSuccessToast()
         })
       )
       .subscribe((budgetList) => {
         this.appDataService.budgetListUpdate(budgetList)
+        this.dialogRef.close()
       })
   }
 

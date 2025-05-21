@@ -93,6 +93,7 @@ export class TransactionFormComponent {
         this.appDataService.transactionsListUpdate(transactionList)
         this.appDataService.updateAccountsListRequest()
         this.appDataService.updateBudgetListRequest()
+        this.appDataService.updateCategoriesSummaryListRequest()
         this.dialogRef.close()
       })
   }
